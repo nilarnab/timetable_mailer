@@ -1,0 +1,42 @@
+<%- include('./components/header.ejs') %>
+
+<h2>Show timetable</h2>
+
+
+<h2>Teachers</h2>
+
+<form action="/admin/handle_add_teacher" method="post">
+    <h2>Add a new teacher</h2>
+    <input name="name">
+    <button role="button" type="submit">Add</button>
+</form>
+
+
+<form action="/admin/handle_add_college" method="post">
+    <h2>Add a college</h2>
+    <!-- 
+        For adding a college
+        required: name
+     -->
+     <input name="name" required>
+     <button role="button" type="submit">Add</button>
+
+     
+</form>
+
+
+<form action="/admin/handle_add_branch" method="post">
+    <h2>Add a new course</h2>
+    <input name="name" required>
+    <button role="button" type="submit">Add</button>
+
+</form>
+
+<h1>Verdict: <%= message %> </h1>
+
+
+
+
+
+
+
