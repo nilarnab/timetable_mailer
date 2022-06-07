@@ -1,0 +1,115 @@
+<%- include('./components/header.ejs') %>
+
+<style>
+    *
+    {
+        transition: 0.5s;
+    }
+
+</style>
+
+<h2>Make a new table</h2>
+
+
+
+<table class="table table-hover">
+    <!-- building header -->
+
+    <thead>
+        <tr>
+            <th>#</th>
+
+            <% 
+                per_ids.forEach((per_id, index) => 
+                {
+                    %>
+                    <th>
+                        <%= per_id %> 
+                        
+
+                    </th>
+                    <%
+                    
+                })
+            %>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        <%
+            days.forEach((day, index_day) => 
+            {    
+                %>
+                <tr >
+                    <th><%= day %> </th>
+                <%
+                    per_ids.forEach((per_id, index) => 
+                    {
+                        %>
+                        <th id="<%= per_id + '_' + day%>" onclick="change_enable('<%= per_id %>', '<%= day %>')">  
+                            <%= per_id + '_' + day %> 
+
+                        <input id="<%= per_id + '_' + day + '_name' %>">
+
+                        <select id="<%= per_id + '_' + day + '_teacher' %>" name="teacher_name">
+                            <%
+                                teachers.forEach((teacher, index) =>
+                                {
+                                    %>
+                                        <option value="<%= teacher['_id'].toString() %>"> <%= teacher.name %>  </option>
+                                    <%
+                                }) 
+                             %> 
+                           
+                        </select>
+
+                        <div id="<%= per_id + '_' + day + '_enable' %>" class="btn btn-default">ENABLED</div>
+
+                        <select id="<%= per_id + '_' + day + '_enable_select' %>">
+                            <option value="1">ENABLED</option>
+                            <option value="0">DISABLED</option>
+                        </select>
+                        </th>
+
+                        <%
+                        
+                    })
+                %>
+                </tr>
+                <%
+                
+            }) 
+         %> 
+
+    </tbody>
+</table>
+
+<script>
+
+    function change_enable(per_id, day)
+    {
+        var id = per_id + '_' + day
+        console.log("function called " + id + '_enable')
+        console.log("getting: " + document.getElementById(id + '_enable').innerHTML)
+
+        
+        
+
+        if (document.getElementById(id + '_enable').innerHTML == 'ENABLED')
+        {
+
+            document.getElementById(id + '_enable').innerHTML = 'DISABLED'
+            document.getElementById(id).style.backgroundColor = 'tomato'
+            document.getElementById(id).style.opacity = '0.8'
+
+        }
+        else
+        {
+            document.getElementById(id + '_enable').innerHTML = 'ENABLED'
+            document.getElementById(id).style.backgroundColor = 'rgb(0, 0, 0, 0)'
+            document.getElementById(id).style.opacity = '1'
+        }
+    }
+
+</script>
