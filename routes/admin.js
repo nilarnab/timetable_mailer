@@ -30,7 +30,7 @@ router.get('/home', middleware.auth, async (req, res, next) =>
     var per_ids_array = ['1', '2', '3', '4', '5', '6', '7', '8']
 
 
-    
+
     
     return res.render("../views/admin.ejs", {message: message, days: days_array, per_ids: per_ids_array, teachers: all_teachers, user: req.session})
 
@@ -67,7 +67,7 @@ router.get('/make_table', middleware.auth, async(req, res, next) =>
 })
 
 // post requests
-router.post('/handle_add_college', async (req, res, next) => {
+router.post('/handle_add_college', middleware.auth_super, async (req, res, next) => {
 
     const college = new College(
         {
@@ -93,7 +93,7 @@ router.post('/handle_add_college', async (req, res, next) => {
 })
 
 
-router.post('/handle_add_branch', async (req, res, next) => {
+router.post('/handle_add_branch', middleware.auth_super, async (req, res, next) => {
 
     const branch = new Branch(
         {
@@ -144,7 +144,7 @@ router.post('/get_existing_data', async (req, res, next) => {
 })
 
 
-router.post('/handle_add_teacher', async (req, res, next) => {
+router.post('/handle_add_teacher', middleware.auth_super, async (req, res, next) => {
 
     const teacher = new Teacher(
         {
@@ -171,7 +171,7 @@ router.post('/handle_add_teacher', async (req, res, next) => {
 })
 
 
-router.post('/handle_new_schedule', async (req, res, next) => 
+router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, next) => 
 {
 
 
