@@ -1,16 +1,19 @@
 <%- include('./components/header.ejs') %>
 
 <style>
-    *
-    {
+    * {
         transition: 0.5s;
     }
 
 </style>
 
-<h2>Make a new table</h2>
+<h2 align="center">Make a new table</h2>
 
+<div align="center">
+    <input id="table_name" oninput="set_table()" placeholder="table name">
+</div>
 
+<div class="cont" style="padding: 20px; overflow: auto; width: 95%; margin: auto">
 
 <table class="table table-hover">
     <!-- building header -->
@@ -23,12 +26,12 @@
                 per_ids.forEach((per_id, index) => 
                 {
                     %>
-                    <th>
-                        <%= per_id %> 
-                        
+            <th>
+                <%= per_id %>
 
-                    </th>
-                    <%
+
+            </th>
+            <%
                     
                 })
             %>
@@ -41,75 +44,300 @@
             days.forEach((day, index_day) => 
             {    
                 %>
-                <tr >
-                    <th><%= day %> </th>
-                <%
+        <tr>
+            <th><%= day %> </th>
+            <%
                     per_ids.forEach((per_id, index) => 
                     {
                         %>
-                        <th id="<%= per_id + '_' + day%>" onclick="change_enable('<%= per_id %>', '<%= day %>')">  
-                            <%= per_id + '_' + day %> 
+            <th id="<%= per_id + '_' + day%>" style="background-color: tomato; opacity: 0.8">
+                <%= per_id + '_' + day %>
 
-                        <input id="<%= per_id + '_' + day + '_name' %>">
+                <input id="<%= per_id + '_' + day + '_name' %>" oninput="change_enable('<%= per_id %>', '<%= day %>')">
 
-                        <select id="<%= per_id + '_' + day + '_teacher' %>" name="teacher_name">
-                            <%
+                Teacher: 
+                <select id="<%= per_id + '_' + day + '_teacher' %>" name="teacher_name">
+                    <option value="none">Select</option>
+                    <%
                                 teachers.forEach((teacher, index) =>
                                 {
                                     %>
-                                        <option value="<%= teacher['_id'].toString() %>"> <%= teacher.name %>  </option>
-                                    <%
+                    <option value="<%= teacher['_id'].toString() %>"> <%= teacher.name %> </option>
+                    <%
                                 }) 
-                             %> 
-                           
-                        </select>
+                             %>
 
-                        <div id="<%= per_id + '_' + day + '_enable' %>" class="btn btn-default">ENABLED</div>
+                </select>
 
-                        <select id="<%= per_id + '_' + day + '_enable_select' %>">
-                            <option value="1">ENABLED</option>
-                            <option value="0">DISABLED</option>
-                        </select>
-                        </th>
+                <div id="<%= per_id + '_' + day + '_enable' %>" class="btn btn-default">DISABLED</div>
+            </th>
 
-                        <%
+            <%
                         
                     })
                 %>
-                </tr>
-                <%
+        </tr>
+        <%
                 
             }) 
-         %> 
+         %>
 
     </tbody>
 </table>
+</div>
+
+
+<div class="buttton" align="center">
+    <button class="btn btn-success btn-lg" id="submit">Submit</button>
+</div>
+
+<br>
+<div id="progress" class="progress" align="center" style="width: 90%; margin-left: 5%">
+    <div id="p_bar" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+    </div>
+</div>
+<br>
+<br>
+
 
 <script>
+    // hardcoded
 
-    function change_enable(per_id, day)
+
+    
+    window.setInterval(() =>
     {
+        var days = []
+        var per_ids = []
+
+        <% 
+            days.forEach((day, index_day) => 
+            { 
+                %>
+                days.push('<%= day %>')
+                <%
+            });
+        %>
+
+        <% 
+            per_ids.forEach((per_id, index_day) => 
+            { 
+                %>
+                per_ids.push('<%= per_id %>')
+                <%
+            });
+        %> 
+
+
+        days.forEach((day, index_day) => {
+            per_ids.forEach((per_id, index) => {
+                
+
+                change_enable(per_id, day)
+
+
+            })
+        })
+
+
+
+
+    }, 1000)
+    
+
+    function change_enable(per_id, day) {
         var id = per_id + '_' + day
-        console.log("function called " + id + '_enable')
-        console.log("getting: " + document.getElementById(id + '_enable').innerHTML)
+        // console.log("function called " + id + '_enable')
+        // console.log("getting: " + document.getElementById(id + '_enable').innerHTML)
 
-        
-        
 
-        if (document.getElementById(id + '_enable').innerHTML == 'ENABLED')
-        {
 
+
+        if (document.getElementById(id + '_name').value.length == 0) {
+https://meet.google.com/cuk-nauy-uym
             document.getElementById(id + '_enable').innerHTML = 'DISABLED'
             document.getElementById(id).style.backgroundColor = 'tomato'
             document.getElementById(id).style.opacity = '0.8'
 
-        }
-        else
-        {
+        } else {
+            
             document.getElementById(id + '_enable').innerHTML = 'ENABLED'
-            document.getElementById(id).style.backgroundColor = 'rgb(0, 0, 0, 0)'
+            document.getElementById(id).style.backgroundColor = 'rgb(0, 255, 0, 0.5)'
             document.getElementById(id).style.opacity = '1'
         }
     }
 
+    function set_table()
+    {
+
+        var days = []
+        var per_ids = []
+
+        <% 
+            days.forEach((day, index_day) => 
+            { 
+                %>
+                days.push('<%= day %>')
+                <%
+            });
+        %>
+
+        <% 
+            per_ids.forEach((per_id, index_day) => 
+            { 
+                %>
+                per_ids.push('<%= per_id %>')
+                <%
+            });
+        %> 
+
+
+        var table_name = document.getElementById('table_name').value
+
+        console.log("updating table")
+
+        $.post('/admin/get_existing_data',  
+            {
+                name: table_name
+            },
+            (data, status) =>
+            {
+                console.log(data)
+
+                var record = data.record
+
+                console.log('recived record')
+                console.log(record)
+
+                days.forEach((day, index_day) => {
+                    per_ids.forEach((per_id, index) => {
+                        
+                        var key = per_id + '_' + day
+
+                        if (key in record)
+                        {
+                            console.log('reocrd already exists for ' + per_id + ' ' + day)
+                            document.getElementById(key + '_name').value = record[key].name
+                            document.getElementById(key + '_teacher').value = record[key].teacher
+                        }
+                        else
+                        {
+                            document.getElementById(key + '_name').value = ''
+                            document.getElementById(key + '_teacher').value = 'none'
+                        }
+
+                    });
+                });
+                    
+            }   
+
+        )
+
+            
+
+
+    }
+
+
+    $(document).ready(function () {
+        
+        var days = []
+        var per_ids = []
+
+        <% 
+            days.forEach((day, index_day) => 
+            { 
+                %>
+                days.push('<%= day %>')
+                <%
+            });
+        %>
+
+        <% 
+            per_ids.forEach((per_id, index_day) => 
+            { 
+                %>
+                per_ids.push('<%= per_id %>')
+                <%
+            });
+        %> 
+
+        console.log('data here')
+        console.log(days)
+        console.log(per_ids)
+
+                $("#submit").click(function () {
+
+
+                    var complete = 0
+                    var cnt = 0
+
+                    days.forEach((day, index_day) => {
+                        per_ids.forEach((per_id, index) => {
+
+                            var id = per_id + '_' + day
+
+                            if (document.getElementById(id + '_enable').innerHTML == 'ENABLED')
+                            {
+                                complete ++;
+                            }
+                        });
+                    });
+
+
+                    days.forEach((day, index_day) => {
+                            per_ids.forEach((per_id, index) => {
+
+                                var id = per_id + '_' + day
+
+                                if (document.getElementById(id + '_enable').innerHTML == 'ENABLED' && document.getElementById(id + '_teacher').value != 'none')
+                                {
+
+                                    $.post("/admin/handle_new_schedule", {
+                                        table_name: document.getElementById('table_name').value,
+                                        course_name: document.getElementById(id + '_name').value,
+                                        day: day,
+                                        per_id: per_id,
+                                        teacher: document.getElementById(id + '_teacher').value,
+                                    },
+                                    function (data, status) {
+                                        
+                                        console.log("for " + day + " " + per_id)
+                                        console.log(data)
+
+                                        if (data.verdict === true)
+                                        {
+                                            console.log('increaseing the count')
+                                            cnt += 1 ;
+                                            document.getElementById('p_bar').style.width = (cnt / complete) * 100 + '%';
+                                            console.log('set the widht as ' + (cnt / complete) * 100 + " cnt: " + cnt)
+                                        }
+
+                                    });
+
+                                }
+                                
+                                
+                                
+                            });
+
+                            
+
+                            window.setTimeout(() =>
+                            {
+                                $('#progress').fadeOut()
+
+                                window.setTimeout(() => {
+                                    document.getElementById('p_bar').style.width = '0%'
+                                    $('#progress').fadeIn()
+                                }, 1000)
+                                
+                            }, 1000)
+                        
+                        });
+                    });
+
+
+                    
+                });
 </script>
