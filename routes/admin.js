@@ -186,7 +186,7 @@ router.post('/get_existing_data', async (req, res, next) => {
 })
 
 
-router.post('/change_identity', middleware.auth_super, async (req, res, next) => {
+router.post('/change_identity', async (req, res, next) => {
 
    
     
@@ -195,7 +195,7 @@ router.post('/change_identity', middleware.auth_super, async (req, res, next) =>
         req.session.branch = req.body.branch
         req.session.college = req.body.college
         req.session.year = req.body.year
-        
+        req.session.message = "Done"
     }
 
     catch
