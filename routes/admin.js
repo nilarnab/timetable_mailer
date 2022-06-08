@@ -23,11 +23,14 @@ router.get('/home', middleware.auth, async (req, res, next) =>
 
     // getting all the teachers
     var all_teachers = await Teacher.find({'college_id': req.session.college}).find({'branch_id': req.session.branch})
-    console.log(all_teachers[0]['_id'].toString())
+    // console.log(all_teachers[0]['_id'].toString())
     req.session.message = null
 
     var days_array = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
     var per_ids_array = ['1', '2', '3', '4', '5', '6', '7', '8']
+
+
+    
     
     return res.render("../views/admin.ejs", {message: message, days: days_array, per_ids: per_ids_array, teachers: all_teachers, user: req.session})
 
@@ -47,7 +50,7 @@ router.get('/make_table', middleware.auth, async(req, res, next) =>
     
     // getting all the teachers
     var all_teachers = await Teacher.find({'college_id': req.session.college}).find({'branch_id': req.session.branch})
-    console.log(all_teachers[0]['_id'].toString())
+    // console.log(all_teachers[0]['_id'].toString())
     req.session.message = null
 
     // hardcoded

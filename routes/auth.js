@@ -88,7 +88,7 @@ router.post('/login_handle', async (req, res, next) => {
     // console.log(req.body);
     if ((await Users.find({ 'email': req.body.email }))[0].password === req.body.password) {
         var data = (await Users.find({ 'email': req.body.email }))[0];
-        req.session.email = data.emil;
+        req.session.email = data.email;
         req.session.branch = data.branch;
         req.session.college = data.college;
         req.session.role = data.role;

@@ -30,6 +30,8 @@
 {
     %>
 <!-- super -->
+<br><br>
+<h1>Super Access</h1>
 <form action="/admin/handle_add_college" method="post">
     <h2>Add a college</h2>
     <!-- 
@@ -42,11 +44,54 @@
 
 </form>
 
-<!-- super -->
+
 <form action="/admin/handle_add_branch" method="post">
     <h2>Add a new branch</h2>
     <input name="name" required>
     <button role="button" type="submit">Add</button>
+
+</form>
+
+
+
+<!-- change identity -->
+
+<form action="/admin/change_identity" method="post">
+
+    <h2>Change college, branch, year</h2>
+
+    <p>Colleges</p>
+    <select name="college_id">
+        <% colleges.forEach((college, index) =>
+        {
+            %>
+            <option value="<%= college._id.toString() %>"><%= college.name %></option>></option>
+            <%
+        }) %> 
+        
+    </select>
+
+    <p>Branch</p>
+    <select name="branch_id">
+        <% branches.forEach((branch, index) =>
+        {
+            %>
+            <option value="<%= branch._id.toString() %>"><%= branch.short_name %></option>
+            <%
+        }) %> 
+        
+    </select>
+
+    <p>Years</p>
+    <select>
+        <% years.forEach((year, index) =>
+        {
+            %>
+            <option value="<%= year._id.toString() %>"><%= year.name %></option>
+            <%
+        }) %> 
+        
+    </select>
 
 </form>
 
