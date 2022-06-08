@@ -159,7 +159,7 @@ router.post('/get_existing_data', async (req, res, next) => {
 })
 
 
-router.post('/handle_add_teacher', middleware.auth_super, async (req, res, next) => {
+router.post('/handle_add_teacher', async (req, res, next) => {
 
     const teacher = new Teacher(
         {
@@ -179,6 +179,11 @@ router.post('/handle_add_teacher', middleware.auth_super, async (req, res, next)
     {
         req.session.message = "Did not work"
     }
+
+    console.log('added a new teacher')
+    console.log("now session")
+    console.log(req.session)
+    console.log('/')
 
     res.redirect('/admin/home');
 

@@ -81,10 +81,17 @@
                 <div class="col-sm-6 col-xm-12">
                     <div class="form-group">
                         <label for="college">College: </label>
+                        
                         <select id="college" class="form-control" name="college">
-                            <option value="1">
-                                MNIT
-                            </option>
+                            <% colleges.forEach((college, index) => {
+                                %>
+                                <option value="<%= college._id.toString() %>">
+                                    <%= college.name %>
+                                </option>
+
+                                <%
+                            }) %> 
+                            
                         </select>
                     </div>
                 </div>
@@ -94,9 +101,14 @@
                     <div class="form-group">
                         <label for="branch">Branch: </label>
                         <select id="branch" class="form-control" name="branch">
-                            <option value="1">
-                                Computer Science and Engineering
-                            </option>
+                            <% branches.forEach((branch, index) => {
+                                %>
+                                <option value="<%= branch._id.toString() %>">
+                                    <%= branch.short_name %>
+                                </option>
+
+                                <%
+                            }) %> 
                         </select>
                     </div>
                 </div>
