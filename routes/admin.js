@@ -75,10 +75,13 @@ router.get('/make_table', middleware.auth, async(req, res, next) =>
     // finding the data that already exists
     
     
+    // making id
+    var user = req.session
+    var user_id = user.college + '_' + user.branch + '_' + user.year
 
 
 
-    return res.render("../views/create_table.ejs", {message: message, days: days_array, per_ids: per_ids_array, teachers: all_teachers})
+    return res.render("../views/create_table.ejs", {message: message, days: days_array, per_ids: per_ids_array, teachers: all_teachers, user_id: user_id})
 })
 
 // post requests
@@ -159,20 +162,40 @@ router.post('/get_existing_data', async (req, res, next) => {
 })
 
 
-router.post('/handle_add_teacher', middleware.auth_super, async (req, res, next) => {
+router.post('/get_existing_data', async (req, res, next) => {
+    
+    var record = {}
 
-    const teacher = new Teacher(
-        {
-            name: req.body.name,
-            college_id: req.session.college,
-            branch_id: req.session.branch
-        }
-    )
+    // console.log("got")
+    // console.log(req.body)
+
+    var existings = await Schedule.find({table_name: req.body.name})
+
+    // console.log(existings)
+
+    existings.forEach((existing, index) => {
+        record[existing.per_id + '_' + existing.day] = {'name': existing.course_name, 'teacher': existing.teacher}
+
+    })
+
+    console.log(record)
+
+    return res.json({record: record})
+
+
+})
+
+
+router.post('/change_identity', middleware.auth_super, async (req, res, next) => {
+
+   
     
     try
     {
-        const new_teacher = await teacher.save() 
-        req.session.message = "Done"
+        req.session.branch = req.body.branch
+        req.session.college = req.body.college
+        req.session.year = req.body.year
+        
     }
 
     catch
@@ -182,6 +205,30 @@ router.post('/handle_add_teacher', middleware.auth_super, async (req, res, next)
 
     res.redirect('/admin/home');
 
+
+})
+
+router.post('/handle_add_year', async (req, res, next) => {
+
+    const year = new Year(
+        {
+            name: req.body.name,
+           
+        }
+    )
+    
+    try
+    {
+        const new_year = await year.save() 
+        req.session.message = "Done"
+    }
+
+    catch
+    {
+        req.session.message = "Did not work"
+    }
+
+    res.redirect('/admin/home');
 
 })
 
@@ -270,9 +317,6 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
         }
 
     }
-
-    
-    
 
 })
 

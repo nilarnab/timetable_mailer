@@ -217,6 +217,12 @@
                         {
                             document.getElementById('welcome').innerHTML = 'Welcome, redirecting to home page';
                             $('#welcome').fadeIn();
+
+                            window.setTimeout(() =>
+                            {
+                                window.location.replace("/admin/home");
+                            }, 1000)
+                            
                         }, 1000)
 
                     }

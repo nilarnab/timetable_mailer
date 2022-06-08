@@ -3,7 +3,9 @@ const res = require('express/lib/response');
 const { json } = require('express/lib/response');
 const router = express.Router();
 const Users = require('../models/users');
-
+const College = require("../models/colleges")
+const Branch = require("../models/branches")
+const Year = require("../models/years")
 
 middleware = require("../middlewares/auth.js")
 
@@ -14,9 +16,24 @@ router.get('/login', (req, res, next) => {
     res.render("../views/login.ejs");
 })
 
-router.get('/register', (req, res, next) => {
+router.get('/register', async (req, res, next) => {
 
-    res.render("../views/register.ejs", { message: req.session.message });
+    // get all the colleges
+    var colleges = await College.find({})
+
+    // get all the branches
+    var branches = await Branch.find({})
+
+    // get all the years
+    var years = await Year.find({})
+
+    res.render("../views/register.ejs", { 
+        message: req.session.message, 
+        colleges: colleges,
+        branches: branches,
+        years: years
+
+    });
 })
 
 
@@ -39,17 +56,20 @@ router.post('/register_handle', async (req, res, next) => {
         email: req.body.email,
         college: req.body.college,
         branch: req.body.branch,
+        year: req.body.year,
 
         // necessary attributes
         role: 0,
         super: 0,
         password: pass_gen
     })
+    
 
     try {
         const new_user = await user.save();
 
         return res.json({ verdict: true })
+        
     }
     catch (err) {
         return res.json({ verdict: false, message: 'Something went wrong' })
