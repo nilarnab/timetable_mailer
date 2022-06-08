@@ -8,6 +8,24 @@ const tablesSchema= new mongo.Schema({
         type: String,
         required: true
     },
+
+    branch_id:
+    {
+        type: String,
+        require: true
+    },
+
+    college_id:
+    {
+        type: String,
+        require: true
+    },
+
+    year_id:
+    {
+        type: String,
+        require: true
+    }
 })
 
 
