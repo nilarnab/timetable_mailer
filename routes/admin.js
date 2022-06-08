@@ -162,30 +162,6 @@ router.post('/get_existing_data', async (req, res, next) => {
 })
 
 
-router.post('/get_existing_data', async (req, res, next) => {
-    
-    var record = {}
-
-    // console.log("got")
-    // console.log(req.body)
-
-    var existings = await Schedule.find({table_name: req.body.name})
-
-    // console.log(existings)
-
-    existings.forEach((existing, index) => {
-        record[existing.per_id + '_' + existing.day] = {'name': existing.course_name, 'teacher': existing.teacher}
-
-    })
-
-    console.log(record)
-
-    return res.json({record: record})
-
-
-})
-
-
 router.post('/change_identity', async (req, res, next) => {
 
    
