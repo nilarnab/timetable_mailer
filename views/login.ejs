@@ -135,6 +135,7 @@
                     function (data, status) {
                         
                         $('#check_username').fadeOut();
+                        console.log(data)
                         
                         window.setTimeout(() => {
                             handle_username_output(data)
@@ -168,10 +169,12 @@
                 
 
             } else {
-                document.getElementById('conf').innerHTML = data.message;
-                document.getElementById('conf').style.color = 'tomato';
+                document.getElementById('conf_username').innerHTML = '<i class="fa-solid fa-circle-xmark"></i> ' + data.message;
+                document.getElementById('conf_username').style.color = 'tomato';
+                $('#conf_username').fadeIn();
+                $('#check_username').fadeOut();
+                
             }
-
 
 
             $('#buffering').fadeOut();
@@ -195,23 +198,36 @@
                 },
     
                 function (data, status) {
-    
-                    document.getElementById('conf_password').innerHTML = '<i class="fa-solid fa-circle-check"></i> Password OK';
-                    $('#check_password').fadeOut();
-                    $('#conf_password').fadeIn();
-    
-    
-                    console.log(data);
-                    handle_username_output(data)
-    
-                    // final checking complete
-                    // redirect
-    
-                    window.setTimeout(() =>
+                    
+                    if (data.verdict === true)
                     {
-                        document.getElementById('welcome').innerHTML = 'Welcome, redirecting to home page';
-                        $('#welcome').fadeIn();
-                    }, 1000)
+                        document.getElementById('conf_password').innerHTML = '<i class="fa-solid fa-circle-check"></i> Password OK';
+                        $('#check_password').fadeOut();
+                        $('#conf_password').fadeIn();
+        
+        
+                        console.log(data);
+                        handle_username_output(data)
+        
+                        // final checking complete
+                        // redirect
+        
+                        window.setTimeout(() =>
+                        {
+                            document.getElementById('welcome').innerHTML = 'Welcome, redirecting to home page';
+                            $('#welcome').fadeIn();
+                        }, 1000)
+
+                    }
+                    else
+                    {
+                        document.getElementById('conf_password').innerHTML = '<i class="fa-solid fa-circle-xmark"></i> ' + data.message ;
+                        document.getElementById('conf_password').style.color = 'tomato';
+                        $('#check_password').fadeOut();
+                        $('#conf_password').fadeIn();
+
+                    }
+                    
                 });
 
 

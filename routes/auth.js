@@ -85,7 +85,7 @@ router.post('/login_username_handle', async (req, res, next) => {
 
 router.post('/login_handle', async (req, res, next) => {
 
-    return res.json({ verdict: true })
+    return res.json({ verdict: false, message: 'Wrong password'})
 
 })
 
