@@ -3,8 +3,39 @@ const res = require('express/lib/response');
 const session = require('express-session');
 require('dotenv').config()
 const app = express()
+var nodemailer = require('nodemailer');
+let transporter = nodemailer.createTransport({
+    service: "Yahoo",
+    secure: true,
+    auth: {
+        user: "mailerbot20@yahoo.com",
+        pass: "efrnoxzntfobvbfa",
+    },
+});
 
 
+//sending mail
+const sendOtp = (email) => {
+    console.log("sending mail");
+    const otp = 100000 + Math.floor(Math.random() * 899999);
+    var mailOptions = {
+        from: 'mailerbot20@yahoo.com',
+        to: `${email}`,
+        subject: 'Register with us',
+        html: `<div>
+                <h1 style="text-align:center">Hello<h1/>
+                <h2 style="color:green">OTP to Register : ${otp}<h2/>
+            <div/>`
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
+// sendOtp(email);
 // settting up the database
 const mongo = require('mongoose');
 mongo.connect(process.env.DATABASE_URL, { usenewUrlParser: true })
