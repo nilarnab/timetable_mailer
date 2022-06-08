@@ -1,5 +1,9 @@
+require('dotenv').config
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://0.0.0.0:27017/mydb";
+
+
+
+var url = process.env.DATABASE_URL;
 
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;

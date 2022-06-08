@@ -52,8 +52,8 @@ app.get('/set_session', (req, res, next) => {
     req.session.email = 'nilu@gmail.com'
     req.session.branch = '629cfec544c0edf8422d27f41';
     req.session.college = '629de5bc0e3ba1001c7c72831';
-    req.session.role = 0;
-    req.session.super = 0;
+    req.session.role = 1;
+    req.session.super = 1;
 
 
     res.send('session set')

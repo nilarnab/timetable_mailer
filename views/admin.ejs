@@ -3,31 +3,46 @@
 <h2>Show timetable</h2>
 
 
-<h2>Teachers</h2>
 
 
 
+<% if (user.role >= 1)
+{
+    %>
 
+
+    <h1>Teachers</h1>
+
+<!-- prevl -->
 <form action="/admin/handle_add_teacher" method="post">
     <h2>Add a new teacher</h2>
     <input name="name">
     <button role="button" type="submit">Add</button>
 </form>
 
+<% 
+    }
+%> 
 
+
+
+<% if (user.super == 1)
+{
+    %>
+<!-- super -->
 <form action="/admin/handle_add_college" method="post">
     <h2>Add a college</h2>
     <!-- 
         For adding a college
         required: name
      -->
-     <input name="name" required>
-     <button role="button" type="submit">Add</button>
+    <input name="name" required>
+    <button role="button" type="submit">Add</button>
 
-     
+
 </form>
 
-
+<!-- super -->
 <form action="/admin/handle_add_branch" method="post">
     <h2>Add a new branch</h2>
     <input name="name" required>
@@ -35,11 +50,8 @@
 
 </form>
 
+<%
+}
+%>
+
 <h1>Verdict: <%= message %> </h1>
-
-
-
-
-
-
-

@@ -19,7 +19,15 @@ router.get('/register', (req, res, next) => {
 })
 
 
+
+
 // post requests
+
+router.post('/register_username_validation', (req, res, next) => 
+{
+
+    return res.json({verdict: true})
+})
 
 router.post('/register_handle', async (req, res, next) => 
 {
@@ -79,7 +87,7 @@ router.post('/login_username_handle', async (req, res, next) => {
 
 
 router.post('/login_handle', async (req, res, next) => {
-    
+
     return res.json({verdict: true})
 
 })
