@@ -14,8 +14,8 @@ router.get('/login', (req, res, next) => {
 })
 
 router.get('/register', (req, res, next) => {
-    
-    res.render("../views/register.ejs", {message: req.session.message});
+
+    res.render("../views/register.ejs", { message: req.session.message });
 })
 
 
@@ -23,14 +23,12 @@ router.get('/register', (req, res, next) => {
 
 // post requests
 
-router.post('/register_username_validation', (req, res, next) => 
-{
+router.post('/register_username_validation', (req, res, next) => {
 
-    return res.json({verdict: true})
+    return res.json({ verdict: true })
 })
 
-router.post('/register_handle', async (req, res, next) => 
-{
+router.post('/register_handle', async (req, res, next) => {
     console.log(req.body);
 
 
@@ -46,18 +44,17 @@ router.post('/register_handle', async (req, res, next) =>
         super: 0,
         password: pass_gen
     })
-    
-    try
-    {
+
+    try {
         const new_user = await user.save();
-        
-        return res.json({verdict: true})
+
+        return res.json({ verdict: true })
     }
     catch (err) {
-        return res.json({verdict: false, message: 'Something went wrong'})
+        return res.json({ verdict: false, message: 'Something went wrong' })
     }
-    
-    
+
+
 
 })
 
@@ -71,24 +68,24 @@ router.post('/login_username_handle', async (req, res, next) => {
 
     */
 
+    if ((await Users.find({ 'email': req.body.email })).length === 1) {
+        return res.json({ verdict: true });
+    }
+    else {
+        console.log("user not exist");
+        return res.json({ verdict: false, message: "no such email" });
+    }
 
-    var rows = await Users.find({'email': req.body.email})
+    // ** if length > 1: return false, message: Unexpected situation, contact admin
 
-    console.log(rows)
-
-    // if lenght == 1: return res.json({verdict: true})
-    // if length == 0: return false, message: no such email
-
-    // if length > 1: return false, message: Unexpected situation, contact admin
-
-    return res.json({verdict: true})
+    return res.json({ verdict: true })
 
 })
 
 
 router.post('/login_handle', async (req, res, next) => {
 
-    return res.json({verdict: true})
+    return res.json({ verdict: true })
 
 })
 
