@@ -22,7 +22,7 @@ module.exports = {
         else
         {
             console.log("Denied");
-            return res.redirect('/')
+            return res.redirect('/auth/login')
         }
        
     },
@@ -51,7 +51,7 @@ module.exports = {
         }
 
         console.log("Denied");
-        return res.redirect('/')
+        return res.redirect('/auth/login')
 
       
        
@@ -81,7 +81,7 @@ module.exports = {
         }
 
         console.log("Denied");
-        return res.redirect('/')
+        return res.redirect('/auth/login')
 
       
        

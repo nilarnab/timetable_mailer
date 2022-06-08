@@ -5,6 +5,7 @@ const Branch = require("../models/branches")
 const Teacher = require("../models/teachers")
 const Schedule = require("../models/schedule")
 const Table = require("../models/tables")
+const Year = require("../models/years")
 
 middleware = require("../middlewares/auth.js")
 
@@ -29,10 +30,24 @@ router.get('/home', middleware.auth, async (req, res, next) =>
     var days_array = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
     var per_ids_array = ['1', '2', '3', '4', '5', '6', '7', '8']
 
+    // getting super admin data
+    var branches = await Branch.find({})
+    var colleges = await College.find({})
+    var years = await Year.find({})
 
+    console.log(req.session)
 
     
-    return res.render("../views/admin.ejs", {message: message, days: days_array, per_ids: per_ids_array, teachers: all_teachers, user: req.session})
+    return res.render("../views/admin.ejs", {
+        message: message, 
+        days: days_array, 
+        per_ids: per_ids_array, 
+        teachers: all_teachers, 
+        user: req.session,
+        branches: branches,
+        colleges: colleges,
+        years: years
+    })
 
 });
 
