@@ -1,4 +1,5 @@
 const express = require('express');
+const res = require('express/lib/response');
 const { json } = require('express/lib/response');
 const router = express.Router();
 const Users = require('../models/users');
@@ -84,8 +85,20 @@ router.post('/login_username_handle', async (req, res, next) => {
 
 
 router.post('/login_handle', async (req, res, next) => {
+    // console.log(req.body);
+    if ((await Users.find({ 'email': req.body.email }))[0].password === req.body.password) {
+        var data = (await Users.find({ 'email': req.body.email }))[0];
+        req.session.email = data.emil;
+        req.session.branch = data.branch;
+        req.session.college = data.college;
+        req.session.role = data.role;
+        req.session.super = data.super;
+        return res.json({ verdict: true });
 
-    return res.json({ verdict: false, message: 'Wrong password'})
+    }
+    else {
+        return res.json({ verdict: false, message: 'Wrong password' })
+    }
 
 })
 
