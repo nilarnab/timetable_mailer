@@ -330,11 +330,11 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
             }
         )
 
-        const new_entry_ret = await new_entry.save()
+        
 
         try {
 
-
+            const new_entry_ret = await new_entry.save()
             return res.json({ verdict: true })
         }
 
@@ -346,6 +346,30 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
     }
 
 
+
+
+})
+
+router.post('/handle_add_college', middleware.auth_super, async (req, res, next) => {
+
+    const college = new College(
+        {
+            name: req.body.name
+        }
+    )
+
+
+    try {
+        const new_college = await college.save()
+        req.session.message = "Done"
+    }
+
+    catch
+    {
+        req.session.message = "Did not work"
+    }
+
+    res.redirect('/admin/home');
 
 
 })
