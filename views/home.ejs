@@ -1,11 +1,108 @@
-<%- include('./components/header') %> 
+<%- include('./components/header') %>
+
+<style>
+    * {
+        color: rgb(118, 118, 118);
+    }
+
+    .container {
+        width: 90%;
+        margin: auto;
+    }
+
+    .card {
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 5px grey;
+    }
+
+    .line {
+        width: 60%;
+        margin: auto;
+        height: 1px;
+        background-color: black;
+    }
+</style>
+
+
+<div class="container">
+    <div align="center">
+        <h2>Welcome</h2>
+        <p>Change your personal info here</p>
+    </div>
+
+    <div class="line"></div>
+
+    <br><br>
+
+
+    <div class="row">
+
+        <div class="card col-sm-5">
+            <h4 align="center">Personal info</h4>
+            <div class="line"></div>
+            <br><br>
+            <p>email <%= session.email %></p>
+            <p>college <%= user_info.college %></p>
+            <p>branch <%= user_info.branch %></p>
+            <p>year <%= user_info.year %> </p>
+            <p>role <%= session.role %></p>
+            <p>super <%= session.super %></p>
+
+            <br>
+
+        </div>
+
+        <div class="col-sm-1"></div>
+
+        <div class="card col-sm-6">
+            <form action="/user/change_identity" method="post">
+
+                <h2>Change college, branch, year</h2>
+        
+                <p>Colleges</p>
+                <select name="college_id">
+                    <% colleges.forEach((college, index) =>
+                {
+                    %>
+                    <option value="<%= college._id.toString() %>"><%= college.name %></option>></option>
+                    <%
+                }) %>
+        
+                </select>
+        
+                <p>Branch</p>
+                <select name="branch_id">
+                    <% branches.forEach((branch, index) =>
+                {
+                    %>
+                    <option value="<%= branch._id.toString() %>"><%= branch.short_name %></option>
+                    <%
+                }) %>
+        
+                </select>
+        
+                <p>Years</p>
+                <select>
+                    <% years.forEach((year, index) =>
+                {
+                    %>
+                    <option value="<%= year._id.toString() %>"><%= year.name %></option>
+                    <%
+                }) %>
+        
+                </select>
+        
+                <button class="btn btn-default">Submit</button>
+        
+            </form>
+        
+        </div>
 
 
 
-<h2>Session data  </h2>
 
-<p>email <%= session.email %></p>
-<p>college <%= session.college %></p>
-<p>branch <%= session.branch %></p>
-<p>role <%= session.role %></p>
-<p>super <%= session.super %></p>
+
+    </div>
+
+</div>
