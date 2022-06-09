@@ -196,7 +196,10 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
         // make a new table
         var new_table = new Table(
             {
-                name: req.body.table_name
+                name: req.body.table_name,
+                branch_id: req.session.branch,
+                college_id: req.session.college,
+                year_id: req.session.year
             }
         )
 
