@@ -1,265 +1,224 @@
 <%- include('./components/header.ejs') %>
 
-<style>
-    body,
-    html {
-        padding: 0 0;
-        margin: 0 !important;
-        height: 100%;
-        background: linear-gradient(150deg, white, rgb(178, 209, 235));
-        font-family: 'Indie Flower', cursive;
-        font-weight: 5000 !important;
-        font-size: large;
-        color: rgb(6, 32, 54) !important;
-    }
+    <style>
+        body,
+        html {
+            padding: 0 0;
+            margin: 0 !important;
+            height: 100%;
+            background: linear-gradient(150deg, white, rgb(178, 209, 235));
+            font-family: 'Indie Flower', cursive;
+            font-weight: 5000 !important;
+            font-size: large;
+            color: rgb(6, 32, 54) !important;
+        }
 
-    .outer {}
+        .outer {}
 
-    .line {
-        background-color: rgb(46, 113, 173);
-        width: 80%;
-        height: 1px;
-        margin: auto;
-    }
+        .line {
+            background-color: rgb(46, 113, 173);
+            width: 80%;
+            height: 1px;
+            margin: auto;
+        }
 
-    .elevate {
-        box-shadow: 0px 0px 20px rgb(100, 139, 174);
-    }
+        .elevate {
+            box-shadow: 0px 0px 20px rgb(100, 139, 174);
+        }
 
-    .btn_elevate {
-        box-shadow: 1px 1px 20px rgb(10, 66, 115);
-    }
+        .btn_elevate {
+            box-shadow: 1px 1px 20px rgb(10, 66, 115);
+        }
 
-
-    .container {
-
-        margin-top: 50px;
-        padding: 50px;
-
-        border-radius: 20px;
-        background: linear-gradient(150deg, white, rgb(178, 209, 235));
-
-        background-color: rgb(249, 252, 255);
-        justify-content: center;
-
-        color: rgb(46, 113, 173) !important;
+        .container {
+            margin-top: 50px;
+            padding: 50px;
+            border-radius: 20px;
+            background: linear-gradient(150deg, white, rgb(178, 209, 235));
+            background-color: rgb(249, 252, 255);
+            justify-content: center;
+            color: rgb(46, 113, 173) !important;
+        }
+    </style>
 
 
+    <body>
 
-    }
-</style>
+        <div class="outer">
+
+            <div class="col-sm-3"></div>
+
+            <div class="container col-sm-6 elevate">
+                <h1 align="center">Chill Padhai <i class="fa-solid fa-leaf"></i></h1>
+
+                <br>
+                <div class="line"></div>
+                <br>
+
+                <p>Register and chill as we will keep sending timetable and later important materials</p>
+                <p>Already have an account? You might wanna <a href="/auth/login" style="color: blue">Login</a></a>
+                </p>
+                <br>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email"
+                        placeholder="Golumalu@college.ac.in" required>
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="col-sm-12 col-xm-12">
+                        <div class="form-group">
+                            <label for="college">College: </label>
+
+                            <select id="college" class="form-control" name="college">
+                                <% colleges.forEach((college, index)=> {
+                                    %>
+                                    <option value="<%= college._id.toString() %>">
+                                        <%= college.name %>
+                                    </option>
+                                    <% }) %>
+
+                            </select>
+                        </div>
+                    </div>
 
 
-<body>
+                    <div class="col-sm-6 col-xm-12">
+                        <div class="form-group">
+                            <label for="branch">Branch: </label>
+                            <select id="branch" class="form-control" name="branch">
+                                <% branches.forEach((branch, index)=> {
+                                    %>
+                                    <option value="<%= branch._id.toString() %>">
+                                        <%= branch.short_name %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                        </div>
+                    </div>
+                    <<<<<<< HEAD=======>>>>>>> 383d49f1a4b956dc480f1f265bc5123092948597
+                        <div class="col-sm-6 col-xm-12">
+                            <div class="form-group">
+                                <label for="year">Year: </label>
+                                <select id="year" class="form-control" name="year">
+                                    <% years.forEach((year, index)=> {
+                                        %>
+                                        <option value="<%= year._id.toString() %>">
+                                            <%= year.name %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                        </div>
 
-    <div class="outer">
+                        <div align="center">
+                            <br>
+                            <button class="btn btn-primary btn-lg btn_elevate" id="submit"> <i
+                                    class="fa-solid fa-umbrella-beach"></i> Submit</button>
+                            <br>
+                            <p id="username_checking"></p>
+                            <p id="username_ok" style="color: green"></p>
+                            <p id="buffering"></p>
+                            <p id="conf"></p>
+                        </div>
 
-        <div class="col-sm-3"></div>
 
-        <div class="container col-sm-6 elevate">
-            <h1 align="center">Chill Padhai <i class="fa-solid fa-leaf"></i></h1>
 
-            <br>
-            <div class="line"></div>
-            <br>
 
-            <p>Register and chill as we will keep sending timetable and later important materials</p>
-            <p>Already have an account? You might wanna <a href="/auth/login" style="color: blue">Login</a></a>
-            </p>
-            <br>
+                </div>
 
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Golumalu@college.ac.in"
-                    required>
+                <br>
             </div>
 
-            <br>
-
-            <div class="row">
-
-                <div class="col-sm-12 col-xm-12">
-                    <div class="form-group">
-                        <label for="college">College: </label>
-                        
-                        <select id="college" class="form-control" name="college">
-                            <% colleges.forEach((college, index) => {
-                                %>
-                                <option value="<%= college._id.toString() %>">
-                                    <%= college.name %>
-                                </option>
-
-                                <%
-                            }) %> 
-                            
-                        </select>
-                    </div>
-                </div>
-
-
-                <div class="col-sm-6 col-xm-12">
-                    <div class="form-group">
-                        <label for="branch">Branch: </label>
-                        <select id="branch" class="form-control" name="branch">
-                            <% branches.forEach((branch, index) => {
-                                %>
-                                <option value="<%= branch._id.toString() %>">
-                                    <%= branch.short_name %>
-                                </option>
-
-                                <%
-                            }) %> 
-                        </select>
-                    </div>
-                </div>
-<<<<<<< HEAD
-
-=======
-                
->>>>>>> 383d49f1a4b956dc480f1f265bc5123092948597
-                <div class="col-sm-6 col-xm-12">
-                    <div class="form-group">
-                        <label for="year">Year: </label>
-                        <select id="year" class="form-control" name="year">
-                            <% years.forEach((year, index) => {
-                                %>
-                                <option value="<%= year._id.toString() %>">
-                                    <%= year.name %>
-                                </option>
-
-                                <%
-                            }) %> 
-                        </select>
-                    </div>
-                </div>
-
-                <div align="center">
-                    <br>
-                    <button class="btn btn-primary btn-lg btn_elevate" id="submit"> <i
-                            class="fa-solid fa-umbrella-beach"></i> Submit</button>
-                    <br>
-                    <p id="username_checking"></p>
-                    <p id="username_ok" style="color: green"></p>
-                    <p id="buffering"></p>
-                    <p id="conf"></p>
-                </div>
-
-
-
-
-            </div>
-
-            <br>
+            <div class="col-sm-3"></div>
         </div>
 
-        <div class="col-sm-3"></div>
-    </div>
 
 
 
-
-    <div>
+        <div>
 
 
 
 
 
-    </div>
+        </div>
 
 
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
-    </script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
+            </script>
 
-    <script>
-        $('#conf').fadeOut();
-        $('#buffering').fadeOut();
-        $('#username_ok').fadeOut();
-        $('#username_checking').fadeOut();
+        <script>
+            $('#conf').fadeOut();
+            $('#buffering').fadeOut();
+            $('#username_ok').fadeOut();
+            $('#username_checking').fadeOut();
+            $(document).ready(function () {
+                $("#submit").click(function () {
+                    document.getElementById('username_checking').innerHTML =
+                        '<i class="fa-solid fa-spinner"></i> Checking email';
+                    $('#username_checking').fadeIn();
 
-        $(document).ready(function () {
+                    window.setTimeout(() => {
+                        $.post('/auth/register_username_validation', {
+                            email: document.getElementById('email').value
+                        },
+                            (res, req) => {
+                                if (res.verdict === true) {
+                                    document.getElementById('username_ok').innerHTML =
+                                        '<i class="fa-solid fa-circle-check"></i> Email OK';
+                                    $('#username_ok').fadeIn();
+                                    $('#username_checking').fadeOut();
+                                    window.setTimeout(() => {
+                                        registration();
+                                    }, 1000)
+                                }
+                            });
+                    }, 1000)
 
-            $("#submit").click(function () {
-
-                document.getElementById('username_checking').innerHTML =
-                '<i class="fa-solid fa-spinner"></i> Checking email';
-                $('#username_checking').fadeIn();
-                
-                window.setTimeout(() => {
-                    $.post('/auth/register_username_validation', {
-                        email: document.getElementById('email').value
-                    },
-                    (res, req) => {
-
-                        if (res.verdict === true) {
-                            document.getElementById('username_ok').innerHTML =
-                                '<i class="fa-solid fa-circle-check"></i> Email OK';
-                            $('#username_ok').fadeIn();
-                            $('#username_checking').fadeOut();
-
-                            window.setTimeout(() => {
-                                registration();
-                            }, 1000)
-
-                        }
-
-                    });
-                }, 1000)
-
-                
-
+                });
             });
+            function registration() {
+                document.getElementById('buffering').innerHTML =
+                    '<i class="fa-solid fa-spinner"></i> Registering';
+                $('#buffering').fadeIn();
 
-        });
-
-
-        function registration() {
-
-
-            document.getElementById('buffering').innerHTML =
-                '<i class="fa-solid fa-spinner"></i> Registering';
-            $('#buffering').fadeIn();
-            
-            console.log("proceeding for registration")
-            $.post("/auth/register_handle", {
+                console.log("proceeding for registration")
+                $.post("/auth/register_handle", {
                     email: document.getElementById('email').value,
                     college: document.getElementById('college').value,
                     branch: document.getElementById('branch').value,
                     year: document.getElementById('year').value
                 },
-                function (data, status) {
-                    console.log(data);
-                    handle_output(data)
-                });
-        }
-
-
-
-
-        function handle_output(data) {
-
-            if (data.verdict === true) {
-                document.getElementById('conf').innerHTML = '<i class="fa-solid fa-circle-check"></i> Yay! you are in';
-                document.getElementById('conf').style.color = 'green';
-            } else {
-                document.getElementById('conf').innerHTML = data.message;
-                document.getElementById('conf').style.color = 'tomato';
+                    function (data, status) {
+                        console.log(data);
+                        handle_output(data)
+                    });
             }
-
-
-            window.setTimeout(() => {
-                $('#buffering').fadeOut();
-
+            function handle_output(data) {
+                if (data.verdict === true) {
+                    document.getElementById('conf').innerHTML = '<i class="fa-solid fa-circle-check"></i> Yay! you are in';
+                    document.getElementById('conf').style.color = 'green';
+                } else {
+                    document.getElementById('conf').innerHTML = data.message;
+                    document.getElementById('conf').style.color = 'tomato';
+                }
                 window.setTimeout(() => {
-                    $('#conf').fadeIn();
+                    $('#buffering').fadeOut();
+                    window.setTimeout(() => {
+                        $('#conf').fadeIn();
+                    }, 1000)
+
                 }, 1000)
-                
-            }, 1000)
-            
 
-        }
-    </script>
-</body>
+            }
+        </script>
+    </body>
 
-</html>
+    </html>
