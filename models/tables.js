@@ -6,7 +6,8 @@ const tablesSchema= new mongo.Schema({
     name: 
     {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
 
     branch_id:
