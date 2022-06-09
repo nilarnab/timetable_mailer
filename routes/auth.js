@@ -27,8 +27,8 @@ router.get('/register', async (req, res, next) => {
     // get all the years
     var years = await Year.find({})
 
-    res.render("../views/register.ejs", { 
-        message: req.session.message, 
+    res.render("../views/register.ejs", {
+        message: req.session.message,
         colleges: colleges,
         branches: branches,
         years: years
@@ -102,7 +102,7 @@ router.post('/login_username_handle', async (req, res, next) => {
 
 
 router.post('/login_handle', async (req, res, next) => {
-    // console.log(req.body);
+    console.log(await Users.find({ 'email': req.body.email }));
     if ((await Users.find({ 'email': req.body.email }))[0].password === req.body.password) {
         var data = (await Users.find({ 'email': req.body.email }))[0];
         req.session.email = data.email;

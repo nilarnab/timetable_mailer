@@ -35,7 +35,8 @@ const sendOtp = (email) => {
         }
     });
 }
-// sendOtp(email);
+// sendOtp(email);        <== to send mail 
+
 // settting up the database
 const mongo = require('mongoose');
 mongo.connect(process.env.DATABASE_URL, { usenewUrlParser: true })
