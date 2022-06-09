@@ -118,6 +118,12 @@ router.post('/register_handle', async (req, res, next) => {
     <div/>`;
         SEND_MAIL(req.body.email, subject, body);
         console.log("done");
+
+        const new_user = await user.save();
+
+        return res.json({ verdict: true })
+
+
         return res.json({ verdict: true, status: "mail sent" })
     }
     catch (err) {
@@ -167,6 +173,8 @@ router.post('/login_handle', async (req, res, next) => {
         req.session.year = data.year;
         req.session.role = data.role;
         req.session.super = data.super;
+        req.session.mailVerified = data.mail_verified
+        req.session.enabled = data.enabled
 
         console.log('ssession set freshly')
         console.log(req.session)
