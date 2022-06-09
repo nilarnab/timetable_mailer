@@ -6,11 +6,27 @@ const Teacher = require("../models/teachers")
 const Schedule = require("../models/schedule")
 const Table = require("../models/tables")
 const Year = require("../models/years")
-
+const Users = require('../models/users');
+const Relation = require("../models/BatchTableRel")
 middleware = require("../middlewares/auth.js")
 
 const router = express.Router();
 
+// router.get("/mywork", async (req, res, next) => {
+//     console.log(await Users.find({ email: "vishnumali3911@gmail.com" }));
+//     console.log(await Table.find({}));
+//     // if ((await Users.updateOne({ email: "vishnumali3911@gmail.com" },
+//     //     { $set: { super: 1 } }))) {
+//     //     console.log("updated");
+//     // }
+//     // const newRelation=new Relation({
+//     //     branch_id: '62a0b95ed86d79902c0c661d',
+//     //     college_id: '62a0b81a1581908370fd3ec8',
+//     //     year_id: '62a0efdf5f57a39d74c6dfbc'
+//     //     name :
+//     // })
+
+// })
 router.get('/home', middleware.auth, async (req, res, next) => {
     if (req.session.message) {
         var message = req.session.message
@@ -73,12 +89,13 @@ router.get('/make_table', middleware.auth, async (req, res, next) => {
 
 
 
-    return res.render("../views/create_table.ejs", { 
-        message: message, 
+    return res.render("../views/create_table.ejs", {
+        message: message,
         days: days_array,
-        per_ids: per_ids_array, 
+        per_ids: per_ids_array,
         teachers: all_teachers,
-        user: req.session })
+        user: req.session
+    })
 })
 
 // post requests
@@ -137,24 +154,20 @@ router.post('/get_existing_data', async (req, res, next) => {
     // find if has access of the table
     var access = 1
 
-    var old_table = await Table.find({name: req.body.name})
+    var old_table = await Table.find({ name: req.body.name })
 
-    if (req.session.super == 0)
-    {
-        if (old_table.length > 0)
-        {
+    if (req.session.super == 0) {
+        if (old_table.length > 0) {
             // table already exists
-            
+
             // finding if it is the batch table
             if (req.session.branch == old_table[0].branch_id
                 && req.session.college == old_table[0].college_id
-                && req.session.year == old_table[0].year_id)
-            {
+                && req.session.year == old_table[0].year_id) {
 
             }
 
-            else
-            {
+            else {
                 access = 0
             }
 
@@ -163,20 +176,19 @@ router.post('/get_existing_data', async (req, res, next) => {
     }
 
     console.log('current access ' + access)
-    
-    
+
+
     var record = {}
 
     // console.log("got")
     // console.log(req.body)
 
-    if (access)
-    {
+    if (access) {
         var existings = await Schedule.find({ table_name: req.body.name })
 
         // console.log(existings)
 
-        
+
 
         existings.forEach((existing, index) => {
             record[existing.per_id + '_' + existing.day] = { 'name': existing.course_name, 'teacher': existing.teacher }
@@ -185,7 +197,7 @@ router.post('/get_existing_data', async (req, res, next) => {
 
 
     }
-    
+
     console.log(record)
 
     return res.json({ record: record })
@@ -228,24 +240,20 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
     // fiding if access is there
     var access = 1
 
-    var old_table = await Table.find({table_name: req.body.name})
+    var old_table = await Table.find({ table_name: req.body.name })
 
-    if (req.session.super == 0)
-    {
-        if (old_table.length > 0)
-        {
+    if (req.session.super == 0) {
+        if (old_table.length > 0) {
             // table already exists
-            
+
             // finding if it is the batch table
             if (req.session.branch == old_table[0].branch_id
                 && req.session.college == old_table[0].college_id
-                && req.session.year == old_table[0].year_id)
-            {
+                && req.session.year == old_table[0].year_id) {
 
             }
 
-            else
-            {
+            else {
                 access = 0
             }
 
@@ -256,19 +264,14 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
     console.log("access at insertion " + access)
 
     if (access == 0) {
-        return res.json({verdict: false, message: 'forbiddeen'})
+        return res.json({ verdict: false, message: 'forbiddeen' })
     }
 
 
-    // check if the table is already made
-    var existing_table = await Table.find({ name: req.body.table_name })
+    // check if the table is already there
 
-    console.log("existing table")
-    console.log(existing_table)
-
-    if (existing_table.length == 0) {
+    if ((await Table.find({ name: req.body.table_name })).length === 0) {
         // make a new table
-
         console.log('creating table')
         var new_table = new Table(
             {
@@ -297,7 +300,7 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
 
     if (old_entry.length > 0) {
 
-        console.log('updating entry')
+        console.log('updating entry');
 
         var update_entry = await Schedule.updateOne(
             {
@@ -327,7 +330,7 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
             }
         )
 
-        
+
 
         try {
 

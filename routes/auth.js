@@ -70,8 +70,6 @@ router.get('/register', async (req, res, next) => {
 // post requests
 
 router.post('/register_username_validation', async (req, res, next) => {
-    
-
     if ((await Users.find({ 'email': req.body.email })).length == 0) {
         return res.json({ verdict: true });
     }
@@ -95,60 +93,51 @@ router.post('/register_handle', async (req, res, next) => {
         // necessary attributes
         role: 0,
         super: 0,
-        password: pass_gen
+        password: pass_gen,
+        enabled: 1,
+        mail_verified: 0
     })
-
-    const token = new AccessToken({
-        email: req.body.email,
-        access_token: JSON.stringify(Math.floor(Math.random() * 100000000000000))
-    })
-
-    try {
-        console.log(await AccessToken.find({}), "hehe");
-        const new_token = await token.save();
-
-        //send mail with access token
-        let subject = "Verify Your Email";
-        // hardcoded URL
-        let url = "http://localhost:3000/verify_mail?email=";
-        let verifying_link = url + req.body.email + "&token=" + token.access_token;
-        let body = `<div>
-        <h1 style="text-align:center">Hello<h1/>
-        <h2 style="color:green">Click on the given link to verify your mail ${verifying_link}<h2/>
-    <div/>`;
-        SEND_MAIL(req.body.email, subject, body);
-        console.log("done");
-
-        const new_user = await user.save();
-
-        return res.json({ verdict: true })
-
-
-        return res.json({ verdict: true, status: "mail sent" })
+    if ((await AccessToken.find({ email: req.body.email })).length === 0) {
+        const token = new AccessToken({
+            email: req.body.email,
+            access_token: JSON.stringify(Math.floor(Math.random() * 100000000000000))
+        })
+        try {
+            const new_token = await token.save();
+            const new_user = await user.save();
+            console.log(await Users.find({}));
+            let subject = "Verify Your Email";
+            // hardcoded URL
+            let url = "http://localhost:3000/verify/verify_mail?email=";
+            let verifying_link = url + req.body.email + "&token=" + token.access_token;
+            let body = `<div>
+                                <h1 style="text-align:center">Hello<h1/>
+                                <h2 style="color:green">Click on the given link to verify your mail ${verifying_link}<h2/>
+                            <div/>`;
+            SEND_MAIL(req.body.email, subject, body);
+            console.log("done");
+            return res.json({ verdict: true, status: "mail sent" })
+        }
+        catch (err) {
+            return res.json({ verdict: false, message: 'Unable to generate an access token .Please retry .' });
+        }
     }
-    catch (err) {
-        return res.json({ verdict: false, message: 'Something went wrong' })
+    else {
+        console.log("prohibited");
+        return res.json({ verdict: false, message: "access token already generated.Kindly check the  mail for verifying link." })
     }
+});
 
-    // try {
-    //     const new_user = await user.save();
+// try {
+//     const new_user = await user.save();
 
-    //     return res.json({ verdict: true })
-    // }
-    // catch (err) {
-    //     return res.json({ verdict: false, message: 'Something went wrong' })
-    // }
-
-
-
-})
+//     return res.json({ verdict: true })
+// }
+// catch (err) {
+//     return res.json({ verdict: false, message: 'Something went wrong' })
+// }
 
 router.post('/login_username_handle', async (req, res, next) => {
-
-    // used it to delte an older entry :-)
-    if ((await Users.deleteOne({ 'email': "2020ucp1018@mnit.ac.in" }))) {
-        console.log("deleted");
-    }
     if ((await Users.find({ 'email': req.body.email })).length === 1) {
         return res.json({ verdict: true });
     }
