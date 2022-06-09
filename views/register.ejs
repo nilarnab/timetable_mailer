@@ -30,22 +30,14 @@
             box-shadow: 1px 1px 20px rgb(10, 66, 115);
         }
 
-
         .container {
-
             margin-top: 50px;
             padding: 50px;
-
             border-radius: 20px;
             background: linear-gradient(150deg, white, rgb(178, 209, 235));
-
             background-color: rgb(249, 252, 255);
             justify-content: center;
-
             color: rgb(46, 113, 173) !important;
-
-
-
         }
     </style>
 
@@ -167,11 +159,8 @@
             $('#buffering').fadeOut();
             $('#username_ok').fadeOut();
             $('#username_checking').fadeOut();
-
             $(document).ready(function () {
-
                 $("#submit").click(function () {
-
                     document.getElementById('username_checking').innerHTML =
                         '<i class="fa-solid fa-spinner"></i> Checking email';
                     $('#username_checking').fadeIn();
@@ -181,32 +170,21 @@
                             email: document.getElementById('email').value
                         },
                             (res, req) => {
-
                                 if (res.verdict === true) {
                                     document.getElementById('username_ok').innerHTML =
                                         '<i class="fa-solid fa-circle-check"></i> Email OK';
                                     $('#username_ok').fadeIn();
                                     $('#username_checking').fadeOut();
-
                                     window.setTimeout(() => {
                                         registration();
                                     }, 1000)
-
                                 }
-
                             });
                     }, 1000)
 
-
-
                 });
-
             });
-
-
             function registration() {
-
-
                 document.getElementById('buffering').innerHTML =
                     '<i class="fa-solid fa-spinner"></i> Registering';
                 $('#buffering').fadeIn();
@@ -215,19 +193,15 @@
                 $.post("/auth/register_handle", {
                     email: document.getElementById('email').value,
                     college: document.getElementById('college').value,
-                    branch: document.getElementById('branch').value
+                    branch: document.getElementById('branch').value,
+                    year: document.getElementById('year').value
                 },
                     function (data, status) {
-                        console.log(data, "hey");
+                        console.log(data);
                         handle_output(data)
                     });
             }
-
-
-
-
             function handle_output(data) {
-
                 if (data.verdict === true) {
                     document.getElementById('conf').innerHTML = '<i class="fa-solid fa-circle-check"></i> Yay! you are in';
                     document.getElementById('conf').style.color = 'green';
@@ -235,17 +209,13 @@
                     document.getElementById('conf').innerHTML = data.message;
                     document.getElementById('conf').style.color = 'tomato';
                 }
-
-
                 window.setTimeout(() => {
                     $('#buffering').fadeOut();
-
                     window.setTimeout(() => {
                         $('#conf').fadeIn();
                     }, 1000)
 
                 }, 1000)
-
 
             }
         </script>
