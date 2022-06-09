@@ -101,31 +101,31 @@
                             </select>
                         </div>
                     </div>
-        
-                        <div class="col-sm-6 col-xm-12">
-                            <div class="form-group">
-                                <label for="year">Year: </label>
-                                <select id="year" class="form-control" name="year">
-                                    <% years.forEach((year, index)=> {
-                                        %>
-                                        <option value="<%= year._id.toString() %>">
-                                            <%= year.name %>
-                                        </option>
-                                        <% }) %>
-                                </select>
-                            </div>
-                        </div>
 
-                        <div align="center">
-                            <br>
-                            <button class="btn btn-primary btn-lg btn_elevate" id="submit"> <i
-                                    class="fa-solid fa-umbrella-beach"></i> Submit</button>
-                            <br>
-                            <p id="username_checking"></p>
-                            <p id="username_ok" style="color: green"></p>
-                            <p id="buffering"></p>
-                            <p id="conf"></p>
+                    <div class="col-sm-6 col-xm-12">
+                        <div class="form-group">
+                            <label for="year">Year: </label>
+                            <select id="year" class="form-control" name="year">
+                                <% years.forEach((year, index)=> {
+                                    %>
+                                    <option value="<%= year._id.toString() %>">
+                                        <%= year.name %>
+                                    </option>
+                                    <% }) %>
+                            </select>
                         </div>
+                    </div>
+
+                    <div align="center">
+                        <br>
+                        <button class="btn btn-primary btn-lg btn_elevate" id="submit"> <i
+                                class="fa-solid fa-umbrella-beach"></i> Submit</button>
+                        <br>
+                        <p id="username_checking"></p>
+                        <p id="username_ok" style="color: green"></p>
+                        <p id="buffering"></p>
+                        <p id="conf"></p>
+                    </div>
 
 
 
@@ -174,6 +174,16 @@
                                 if (res.verdict === true) {
                                     document.getElementById('username_ok').innerHTML =
                                         '<i class="fa-solid fa-circle-check"></i> Email OK';
+                                    $('#username_ok').fadeIn();
+                                    $('#username_checking').fadeOut();
+                                    window.setTimeout(() => {
+                                        registration();
+                                    }, 1000)
+                                }
+                                else {
+                                    document.getElementById('username_ok').innerHTML =
+                                        '<i class="fa-solid"></i> email already exists';
+                                    document.getElementById('username_ok').style.color = "red";
                                     $('#username_ok').fadeIn();
                                     $('#username_checking').fadeOut();
                                     window.setTimeout(() => {
