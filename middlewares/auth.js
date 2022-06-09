@@ -36,6 +36,8 @@ module.exports = {
             
         */
         console.log("Auth_super checking middleware");
+        
+        var granted = 0
         if (req.session.email)
         {
 
@@ -44,14 +46,22 @@ module.exports = {
                 if (req.session.role >= 1)
                 {
                     console.log("Granted");
-                    next()
+                    granted = 1
                 }
             }
            
         }
 
-        console.log("Denied");
-        return res.redirect('/auth/login')
+        if (granted == 1)
+        {
+            next()
+        }
+        else
+        {
+            console.log("Denied");
+            return res.redirect('/auth/login')
+        }
+        
 
       
        
