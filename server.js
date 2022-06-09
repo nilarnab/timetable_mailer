@@ -30,6 +30,10 @@ function SEND_MAIL(destination, subject, body) {
     });
 }
 // sendOtp(email);        <== to send mail 
+
+
+
+
 // settting up the database
 const mongo = require('mongoose');
 mongo.connect(process.env.DATABASE_URL, { usenewUrlParser: true })
