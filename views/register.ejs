@@ -104,37 +104,35 @@
                                     <option value="<%= branch._id.toString() %>">
                                         <%= branch.short_name %>
                                     </option>
-
                                     <% }) %>
                             </select>
                         </div>
                     </div>
-
-                    <div class="col-sm-6 col-xm-12">
-                        <div class="form-group">
-                            <label for="year">Year: </label>
-                            <select id="year" class="form-control" name="year">
-                                <% years.forEach((year, index)=> {
-                                    %>
-                                    <option value="<%= year._id.toString() %>">
-                                        <%= year.name %>
-                                    </option>
-
-                                    <% }) %>
-                            </select>
+                    <<<<<<< HEAD=======>>>>>>> 383d49f1a4b956dc480f1f265bc5123092948597
+                        <div class="col-sm-6 col-xm-12">
+                            <div class="form-group">
+                                <label for="year">Year: </label>
+                                <select id="year" class="form-control" name="year">
+                                    <% years.forEach((year, index)=> {
+                                        %>
+                                        <option value="<%= year._id.toString() %>">
+                                            <%= year.name %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div align="center">
-                        <br>
-                        <button class="btn btn-primary btn-lg btn_elevate" id="submit"> <i
-                                class="fa-solid fa-umbrella-beach"></i> Submit</button>
-                        <br>
-                        <p id="username_checking"></p>
-                        <p id="username_ok" style="color: green"></p>
-                        <p id="buffering"></p>
-                        <p id="conf"></p>
-                    </div>
+                        <div align="center">
+                            <br>
+                            <button class="btn btn-primary btn-lg btn_elevate" id="submit"> <i
+                                    class="fa-solid fa-umbrella-beach"></i> Submit</button>
+                            <br>
+                            <p id="username_checking"></p>
+                            <p id="username_ok" style="color: green"></p>
+                            <p id="buffering"></p>
+                            <p id="conf"></p>
+                        </div>
 
 
 
