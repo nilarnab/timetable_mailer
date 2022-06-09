@@ -1,7 +1,7 @@
 const { Int32 } = require('mongodb')
 const { default: mongoose } = require('mongoose')
 const mongo = require('mongoose')
-const { BIT } = require('mysql/lib/protocol/constants/types')
+// const { BIT } = require('mysql/lib/protocol/constants/types')
 const AccessTokenSchema = new mongo.Schema({
 
     email:

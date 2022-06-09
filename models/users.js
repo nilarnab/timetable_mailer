@@ -1,7 +1,7 @@
 const { Int32 } = require('mongodb')
 const { default: mongoose } = require('mongoose')
 const mongo = require('mongoose')
-const { BIT } = require('mysql/lib/protocol/constants/types')
+// const { BIT } = require('mysql/lib/protocol/constants/types')
 
 const UsersSchema = new mongo.Schema({
     email: {
@@ -13,6 +13,10 @@ const UsersSchema = new mongo.Schema({
         required: true,
     },
     college: {
+        type: String,
+        required: true,
+    },
+    year: {
         type: String,
         required: true,
     },

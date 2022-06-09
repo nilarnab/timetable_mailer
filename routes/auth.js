@@ -8,6 +8,7 @@ const Branch = require("../models/branches")
 const Year = require("../models/years")
 const AccessToken = require("../models/accesstokens")
 middleware = require("../middlewares/auth.js")
+
 require('dotenv').config();
 // const mail = require('../server.js');
 var nodemailer = require('nodemailer');
@@ -19,6 +20,7 @@ let transporter = nodemailer.createTransport({
         pass: process.env.MAILING_PASSWORD,
     },
 });
+
 function SEND_MAIL(destination, subject, body) {
     console.log("sending mail");
     var mailOptions = {
@@ -35,6 +37,7 @@ function SEND_MAIL(destination, subject, body) {
         }
     });
 }
+
 // get requests
 router.get('/login', (req, res, next) => {
 
@@ -66,8 +69,18 @@ router.get('/register', async (req, res, next) => {
 
 // post requests
 
-router.post('/register_username_validation', (req, res, next) => {
-    return res.json({ verdict: true })
+router.post('/register_username_validation', async (req, res, next) => {
+    
+
+    if ((await Users.find({ 'email': req.body.email })).length == 0) {
+        return res.json({ verdict: true });
+    }
+    else {
+        console.log("user already exists");
+        return res.json({ verdict: false, message: "Email already exists, proceed to login" });
+    }
+
+    // ** if length > 1: return false, message: Unexpected situation, contact admin
 })
 
 router.post('/register_handle', async (req, res, next) => {
@@ -77,21 +90,26 @@ router.post('/register_handle', async (req, res, next) => {
         email: req.body.email,
         college: req.body.college,
         branch: req.body.branch,
+        year: req.body.year,
+
         // necessary attributes
         role: 0,
         super: 0,
-        password: pass_gen,
-        mail_verified: 0
+        password: pass_gen
     })
+
     const token = new AccessToken({
         email: req.body.email,
         access_token: JSON.stringify(Math.floor(Math.random() * 100000000000000))
     })
+
     try {
         console.log(await AccessToken.find({}), "hehe");
         const new_token = await token.save();
+
         //send mail with access token
         let subject = "Verify Your Email";
+        // hardcoded URL
         let url = "http://localhost:3000/verify_mail?email=";
         let verifying_link = url + req.body.email + "&token=" + token.access_token;
         let body = `<div>
@@ -142,11 +160,17 @@ router.post('/login_handle', async (req, res, next) => {
     console.log(await Users.find({ 'email': req.body.email }));
     if ((await Users.find({ 'email': req.body.email }))[0].password === req.body.password) {
         var data = (await Users.find({ 'email': req.body.email }))[0];
+
         req.session.email = data.email;
         req.session.branch = data.branch;
         req.session.college = data.college;
+        req.session.year = data.year;
         req.session.role = data.role;
         req.session.super = data.super;
+
+        console.log('ssession set freshly')
+        console.log(req.session)
+
         return res.json({ verdict: true });
 
     }
