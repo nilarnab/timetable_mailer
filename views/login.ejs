@@ -213,10 +213,14 @@
                                 window.setTimeout(() => {
                                     document.getElementById('welcome').innerHTML = 'Welcome, redirecting to home page';
                                     $('#welcome').fadeIn();
+
+                                    window.setTimeout(() => {
+                                        location.href = "/user/home";
+                                    }, 1000)
+
+
                                 }, 1000)
-                                window.setTimeout(() => {
-                                    location.href = "/admin/make_table";
-                                }, 500)
+                                
 
                             }
                             else {

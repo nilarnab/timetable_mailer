@@ -17,7 +17,7 @@ router.get('/home', middleware.auth, async (req, res, next) => {
     // res.send(get_college(req.session.College));
     
     var val = await Teacher.find({college_id: req.session.college}).find({branch_id: req.session.branch})
-    console.log(val)
+    console.log("moving ahead")
 
     var branch = ''
     var college = ''
@@ -32,6 +32,8 @@ router.get('/home', middleware.auth, async (req, res, next) => {
     college = college_row.name
 
     var year_row = await Year.findById(req.session.year)
+    console.log("year entry")
+    console.log(req.session)
     year = year_row.name
     
     var branch_row = await Branch.findById(req.session.branch)
