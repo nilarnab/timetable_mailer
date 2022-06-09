@@ -15,6 +15,10 @@ const UsersSchema = new mongo.Schema({
         type: String,
         required: true,
     },
+    year: {
+        type: String,
+        required: true,
+    },
     role: {
         type: Number,
         required: true,

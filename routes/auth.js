@@ -56,17 +56,20 @@ router.post('/register_handle', async (req, res, next) => {
         email: req.body.email,
         college: req.body.college,
         branch: req.body.branch,
+        year: req.body.year,
 
         // necessary attributes
         role: 0,
         super: 0,
         password: pass_gen
     })
+    
 
     try {
         const new_user = await user.save();
 
         return res.json({ verdict: true })
+        
     }
     catch (err) {
         return res.json({ verdict: false, message: 'Something went wrong' })
