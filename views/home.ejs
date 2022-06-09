@@ -42,13 +42,69 @@
             <h4 align="center">Personal info</h4>
             <div class="line"></div>
             <br><br>
-            <p>email <%= session.email %></p>
-            <p>college <%= user_info.college %></p>
-            <p>branch <%= user_info.branch %></p>
-            <p>year <%= user_info.year %> </p>
-            <p>role <%= session.role %></p>
-            <p>super <%= session.super %></p>
 
+            <table class="table table-hover">
+
+                <tbody>
+                    <tr>
+                        <td>
+                            Email
+                        </td>
+                        <td>
+                            <%= session.email %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            College
+                        </td>
+                        <td>
+                            <%= user_info.college %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Branch
+                        </td>
+                        <td>
+                            <%= user_info.branch %>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            Year
+                        </td>
+                        <td>
+                            <%= user_info.year %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Role
+                        </td>
+                        <td>
+                            <%= session.role %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Super
+                        </td>
+                        <td>
+                            <%= session.super %>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+            
             <br>
 
         </div>
@@ -59,44 +115,47 @@
             <form action="/user/change_identity" method="post">
 
                 <h2>Change college, branch, year</h2>
-        
+
+                
                 <p>Colleges</p>
-                <select name="college_id">
+                <select class="form-select form-select-lg" name="college_id" style="width: 100%; padding: 5px">
                     <% colleges.forEach((college, index) =>
                 {
                     %>
                     <option value="<%= college._id.toString() %>"><%= college.name %></option>></option>
                     <%
                 }) %>
-        
+
                 </select>
-        
+
                 <p>Branch</p>
-                <select name="branch_id">
+                <select name="branch_id" style="width: 100%; padding: 5px">
                     <% branches.forEach((branch, index) =>
                 {
                     %>
                     <option value="<%= branch._id.toString() %>"><%= branch.short_name %></option>
                     <%
                 }) %>
-        
+
                 </select>
-        
+
                 <p>Years</p>
-                <select>
+                <select name="year_id" style="width: 100%; padding: 5px">
                     <% years.forEach((year, index) =>
                 {
                     %>
                     <option value="<%= year._id.toString() %>"><%= year.name %></option>
                     <%
                 }) %>
-        
+
                 </select>
-        
+
+                <br><br>
+
                 <button class="btn btn-default">Submit</button>
-        
+
             </form>
-        
+
         </div>
 
 
