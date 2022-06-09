@@ -73,12 +73,13 @@ router.get('/make_table', middleware.auth, async (req, res, next) => {
 
 
 
-    return res.render("../views/create_table.ejs", { 
-        message: message, 
+    return res.render("../views/create_table.ejs", {
+        message: message,
         days: days_array,
-        per_ids: per_ids_array, 
+        per_ids: per_ids_array,
         teachers: all_teachers,
-        user: req.session })
+        user: req.session
+    })
 })
 
 // post requests
@@ -98,7 +99,7 @@ router.post('/handle_add_college', middleware.auth_super, async (req, res, next)
 
     catch
     {
-        req.session.message = "Did not work"
+        req.session.message = "Did not work";
     }
 
     res.redirect('/admin/home');
@@ -135,59 +136,20 @@ router.post('/handle_add_branch', middleware.auth_super, async (req, res, next) 
 // get course name, teacher given a per_id and day
 router.post('/get_existing_data', async (req, res, next) => {
 
-
-    // find if has access of the table
-    var access = 1
-
-    var old_table = await Table.find({name: req.body.name})
-
-    if (req.session.super == 0)
-    {
-        if (old_table.length > 0)
-        {
-            // table already exists
-            
-            // finding if it is the batch table
-            if (req.session.branch == old_table[0].branch_id
-                && req.session.college == old_table[0].college_id
-                && req.session.year == old_table[0].year_id)
-            {
-
-            }
-
-            else
-            {
-                access = 0
-            }
-
-        }
-
-    }
-
-    console.log('current access ' + access)
-    
-    
     var record = {}
 
     // console.log("got")
     // console.log(req.body)
 
-    if (access)
-    {
-        var existings = await Schedule.find({ table_name: req.body.name })
+    var existings = await Schedule.find({ table_name: req.body.name })
 
-        // console.log(existings)
+    // console.log(existings)
 
-        
+    existings.forEach((existing, index) => {
+        record[existing.per_id + '_' + existing.day] = { 'name': existing.course_name, 'teacher': existing.teacher }
 
-        existings.forEach((existing, index) => {
-            record[existing.per_id + '_' + existing.day] = { 'name': existing.course_name, 'teacher': existing.teacher }
+    })
 
-        })
-
-
-    }
-    
     console.log(record)
 
     return res.json({ record: record })
@@ -228,39 +190,6 @@ router.post('/handle_add_teacher', async (req, res, next) => {
 
 
 router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, next) => {
-    // fiding if access is there
-    var access = 1
-
-    var old_table = await Table.find({table_name: req.body.name})
-
-    if (req.session.super == 0)
-    {
-        if (old_table.length > 0)
-        {
-            // table already exists
-            
-            // finding if it is the batch table
-            if (req.session.branch == old_table[0].branch_id
-                && req.session.college == old_table[0].college_id
-                && req.session.year == old_table[0].year_id)
-            {
-
-            }
-
-            else
-            {
-                access = 0
-            }
-
-        }
-
-    }
-
-    console.log("access at insertion " + access)
-
-    if (access == 0) {
-        return res.json({verdict: false, message: 'forbiddeen'})
-    }
 
 
     // check if the table is already made
@@ -271,8 +200,6 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
 
     if (existing_table.length == 0) {
         // make a new table
-
-        console.log('creating table')
         var new_table = new Table(
             {
                 name: req.body.table_name,

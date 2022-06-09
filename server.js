@@ -4,29 +4,22 @@ const session = require('express-session');
 require('dotenv').config()
 const app = express()
 var nodemailer = require('nodemailer');
-
 let transporter = nodemailer.createTransport({
     service: "Yahoo",
     secure: true,
     auth: {
-        user: "mailerbot20@yahoo.com",
-        pass: "efrnoxzntfobvbfa",
+        user: process.env.MAILING_EMAIL,
+        pass: process.env.MAILING_PASSWORD,
     },
 });
-
-
 //sending mail
-const sendOtp = (email) => {
+function SEND_MAIL(destination, subject, body) {
     console.log("sending mail");
-    const otp = 100000 + Math.floor(Math.random() * 899999);
     var mailOptions = {
-        from: 'mailerbot20@yahoo.com',
-        to: `${email}`,
-        subject: 'Register with us',
-        html: `<div>
-                <h1 style="text-align:center">Hello<h1/>
-                <h2 style="color:green">OTP to Register : ${otp}<h2/>
-            <div/>`
+        from: process.env.MAILING_EMAIL,
+        to: destination,
+        subject: subject,
+        html: body
     };
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
@@ -70,9 +63,7 @@ app.get('/', (req, res, next) => {
     res.send("Pre login");
 
 })
-
 app.get('/test', (req, res, next) => {
-
     var my_obj = { email: "something@gmail.com", password: "plain data" }
 
     db.collection('users').insertOne(my_obj, (err, res) => {
@@ -100,5 +91,5 @@ const userRouter = require('./routes/user.js');
 app.use('/admin', adminRouters);
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
-
+module.exports = { SEND_MAIL };
 app.listen(3000)
