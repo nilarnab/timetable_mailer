@@ -93,7 +93,7 @@ router.post('/handle_add_college', middleware.auth_super, async (req, res, next)
 
     catch
     {
-        req.session.message = "Did not work"
+        req.session.message = "Did not work";
     }
 
     res.redirect('/admin/home');
