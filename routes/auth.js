@@ -41,9 +41,19 @@ router.get('/register', async (req, res, next) => {
 
 // post requests
 
-router.post('/register_username_validation', (req, res, next) => {
+router.post('/register_username_validation', async (req, res, next) => {
 
-    return res.json({ verdict: true })
+
+    if ((await Users.find({ 'email': req.body.email })).length == 0) {
+        return res.json({ verdict: true });
+    }
+    else {
+        console.log("user already exists");
+        return res.json({ verdict: false, message: "Email already exists, proceed to login" });
+    }
+
+    // ** if length > 1: return false, message: Unexpected situation, contact admin
+
 })
 
 router.post('/register_handle', async (req, res, next) => {
@@ -111,6 +121,7 @@ router.post('/login_handle', async (req, res, next) => {
         req.session.email = data.email;
         req.session.branch = data.branch;
         req.session.college = data.college;
+        req.session.year = data.year;
         req.session.role = data.role;
         req.session.super = data.super;
         return res.json({ verdict: true });
@@ -123,3 +134,5 @@ router.post('/login_handle', async (req, res, next) => {
 })
 
 module.exports = router
+
+

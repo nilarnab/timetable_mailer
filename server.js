@@ -4,6 +4,7 @@ const session = require('express-session');
 require('dotenv').config()
 const app = express()
 var nodemailer = require('nodemailer');
+
 let transporter = nodemailer.createTransport({
     service: "Yahoo",
     secure: true,
@@ -36,6 +37,9 @@ const sendOtp = (email) => {
     });
 }
 // sendOtp(email);        <== to send mail 
+
+
+
 
 // settting up the database
 const mongo = require('mongoose');
