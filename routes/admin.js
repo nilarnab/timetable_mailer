@@ -73,7 +73,13 @@ router.get('/make_table', middleware.auth, async (req, res, next) => {
 
 
 
-    return res.render("../views/create_table.ejs", { message: message, days: days_array, per_ids: per_ids_array, teachers: all_teachers })
+    return res.render("../views/create_table.ejs", {
+        message: message,
+        days: days_array,
+        per_ids: per_ids_array,
+        teachers: all_teachers,
+        user: req.session
+    })
 })
 
 // post requests

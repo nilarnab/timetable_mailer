@@ -29,6 +29,7 @@ function SEND_MAIL(destination, subject, body) {
         }
     });
 }
+// sendOtp(email);        <== to send mail 
 // settting up the database
 const mongo = require('mongoose');
 mongo.connect(process.env.DATABASE_URL, { usenewUrlParser: true })
@@ -58,9 +59,7 @@ app.get('/', (req, res, next) => {
     res.send("Pre login");
 
 })
-
 app.get('/test', (req, res, next) => {
-
     var my_obj = { email: "something@gmail.com", password: "plain data" }
 
     db.collection('users').insertOne(my_obj, (err, res) => {
