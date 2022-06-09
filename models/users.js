@@ -36,6 +36,11 @@ const UsersSchema = new mongo.Schema({
     mail_verified: {
         type: Number,
         default: 0
+    },
+    enabled: 
+    {
+        type: Number,
+        default: 1
     }
 
 })

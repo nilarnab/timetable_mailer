@@ -88,9 +88,12 @@ app.get('/set_session', (req, res, next) => {
 const adminRouters = require('./routes/admin.js');
 const authRouter = require('./routes/auth.js');
 const userRouter = require('./routes/user.js');
+const engineRouter = require('./routes/cronEngine.js');
 
 app.use('/admin', adminRouters);
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
+app.use('/cronEngine', engineRouter)
+
 module.exports = { SEND_MAIL };
 app.listen(3000)

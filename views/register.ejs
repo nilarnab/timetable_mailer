@@ -11,6 +11,7 @@
             font-weight: 5000 !important;
             font-size: large;
             color: rgb(6, 32, 54) !important;
+            overflow: auto;
         }
 
         .outer {}
@@ -100,7 +101,7 @@
                             </select>
                         </div>
                     </div>
-                    <<<<<<< HEAD=======>>>>>>> 383d49f1a4b956dc480f1f265bc5123092948597
+        
                         <div class="col-sm-6 col-xm-12">
                             <div class="form-group">
                                 <label for="year">Year: </label>
@@ -203,7 +204,7 @@
             }
             function handle_output(data) {
                 if (data.verdict === true) {
-                    document.getElementById('conf').innerHTML = '<i class="fa-solid fa-circle-check"></i> Yay! you are in';
+                    document.getElementById('conf').innerHTML = '<i class="fa-solid fa-circle-check"></i> Yay! you are in <br> You will get a verification mail within a minute';
                     document.getElementById('conf').style.color = 'green';
                 } else {
                     document.getElementById('conf').innerHTML = data.message;
