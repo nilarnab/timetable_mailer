@@ -15,6 +15,7 @@ const Teacher = require("../models/teachers")
 const AccessToken = require("../models/accesstokens")
 middleware = require("../middlewares/auth.js")
 var nodemailer = require('nodemailer');
+const { count } = require('../models/colleges');
 
 let transporter = nodemailer.createTransport({
     service: "Yahoo",
@@ -140,28 +141,25 @@ router.get('/start_engine', async (req, res, next) => {
                         var body = '<h4>Hi</h4><p>Your schedule today</p>'
 
                         console.log('in busy loading')
-
-
-
+                        var count_array = [];
                         schedule.forEach(async (entry, index) => {
-                            var teacher_entry = await Teacher.findById(entry.teacher)
-                            console.log(teacher_entry)
+                            var teacher_entry = await Teacher.findById(entry.teacher);
                             body += '<p>at period: ' + entry.per_id + ' you have ' + entry.course_name + ' by ' + teacher_entry.name + '</p>'
 
-                            if (index + 1 == schedule.length) {
-                                body += '<p>Thanks</p>'
-                                body += '<p>MailerBot</p>'
-
-                                SEND_MAIL(user.email, subject, body);
-                                console.log("complete for user", user.email)
-
+                            try {
+                                count_array.push(await Teacher.findById(entry.teacher));
+                                if (count_array.length === schedule.length) {
+                                    console.log(body);
+                                    body += '<p>Thanks</p>'
+                                    body += '<p>MailerBot</p>'
+                                    SEND_MAIL(user.email, subject, body);
+                                    console.log("complete for user", user.email)
+                                }
                             }
-                        })
-
-
-
-
-
+                            catch (error) {
+                                console.log("Error in setting up data for mail to ", user.email);
+                            }
+                        });
                     }
 
 

@@ -11,22 +11,27 @@ const Relation = require("../models/BatchTableRel")
 middleware = require("../middlewares/auth.js")
 
 const router = express.Router();
+function pp() {
+    console.log("jai ho");
+}
+router.get("/mywork", async (req, res, next) => {
+    // console.log(await Users.find({ email: "vishnumali3911@gmail.com" }));
+    console.log(await Users.find({}));
+    if (1) {
+        pp();
+    }
+    // if ((await Users.updateOne({ email: "vishnumali3911@gmail.com" },
+    //     { $set: { super: 1 } }))) {
+    //     console.log("updated");
+    // }
+    // const newRelation=new Relation({
+    //     branch_id: '62a0b95ed86d79902c0c661d',
+    //     college_id: '62a0b81a1581908370fd3ec8',
+    //     year_id: '62a0efdf5f57a39d74c6dfbc'
+    //     name :
+    // })
 
-// router.get("/mywork", async (req, res, next) => {
-//     console.log(await Users.find({ email: "vishnumali3911@gmail.com" }));
-//     console.log(await Table.find({}));
-//     // if ((await Users.updateOne({ email: "vishnumali3911@gmail.com" },
-//     //     { $set: { super: 1 } }))) {
-//     //     console.log("updated");
-//     // }
-//     // const newRelation=new Relation({
-//     //     branch_id: '62a0b95ed86d79902c0c661d',
-//     //     college_id: '62a0b81a1581908370fd3ec8',
-//     //     year_id: '62a0efdf5f57a39d74c6dfbc'
-//     //     name :
-//     // })
-
-// })
+})
 router.get('/home', middleware.auth, async (req, res, next) => {
     if (req.session.message) {
         var message = req.session.message
