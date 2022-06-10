@@ -26,7 +26,73 @@ let transporter = nodemailer.createTransport({
     },
 });
 //sending mail
-function SEND_MAIL(destination, subject, body) {
+function SEND_MAIL(destination, subject, per_id_scheds) {
+
+    var body = ''
+
+
+    body += '<p>Greetings from mailerBot</p>'
+
+    body += '<p>Your Schedule today:</p>'
+
+    body += '<table style="width:60%;">'
+
+    body += '<tr style="color: aliceblue; border: 1px solid grey; background-color: rgb(39, 39, 39); padding: 20px">'
+    body += '<td style="border: 1px solid grey; padding: 20px">Period</td>'
+    body += '<td style="border: 1px solid grey; padding: 20px">Course</td>'
+    body += '<td style="border: 1px solid grey; padding: 20px">Professor</td>'
+    body += '</tr>'
+    
+    // hardcoded
+    var pers = ['1', '2', '3', '4', '5', '6', '7', '8']
+
+    // forming the body
+    pers.forEach((per_id, index) => 
+    {
+        if (per_id in per_id_scheds)
+        {
+            body += '<tr style="color: grey; border: 1px solid grey;">'
+            body += '<td style="border: 1px solid grey; padding: 5px">' + per_id + '</td>'
+            body += '<td style="border: 1px solid grey; padding: 5px">' + per_id_scheds[per_id].course_name + '</td>'
+            body += '<td style="border: 1px solid grey; padding: 5px">' + per_id_scheds[per_id].teacher_name + '</td>'
+            body += '</tr>'
+        }
+        else
+        {
+            body += '<tr style="color: green; border: 1px solid grey;">'
+            body += '<td style="border: 1px solid grey; padding: 5px">' + per_id + '</td>'
+            body += '<td style="border: 1px solid grey; padding: 5px">Free</td>'
+            body += '<td style="border: 1px solid grey; padding: 5px">Free</td>'
+            body += '</tr>' 
+        }
+        
+    })
+    
+    body += '</table>'
+
+    body += '<p>Thanks</p>'
+    body += '<p>mailerBot</p>'
+
+    body += '<br>'
+    body += '<p>PS: This project is running as BETA and might not reflect sudden changes in schedule (Like professor deciding to take 2 extra classes simply because the day is beautiful) or any holiday (as of now!). However, if you want any upgrades, feel free to mail at</p>'
+    body += "<p>nilarnabdebnath@gmail.com</p>"
+    body += "<p>2020ucp1018@mnit.ac.in</p>"
+    body += "<p>(be nice in the mail, and you might even get a reply !!)</p>"
+
+    body += "<p>Jokes apart, we really appreciate any input</p>"
+
+    
+
+
+    console.log('sending to ', destination)
+    console.log(body)
+
+
+    // return 
+
+    // preparing to send the mail
+
+
     console.log("sending mail");
     console.log(subject, body);
     var mailOptions = {
@@ -138,23 +204,32 @@ router.get('/start_engine', async (req, res, next) => {
                         console.log(schedule)
 
                         var subject = 'Your timetable today'
-                        var body = '<h4>Hi</h4><p>Your schedule today</p>'
+                        // var body = '<h4>Hi</h4><p>Your schedule today</p>'
 
                         console.log('in busy loading')
                         var count_array = [];
+                        var per_id_scheds = {};
+
                         schedule.forEach(async (entry, index) => {
                             var teacher_entry = await Teacher.findById(entry.teacher);
-                            body += '<p>at period: ' + entry.per_id + ' you have ' + entry.course_name + ' by ' + teacher_entry.name + '</p>'
+                            // body += '<p>at period: ' + entry.per_id + ' you have ' + entry.course_name + ' by ' + teacher_entry.name + '</p>'
 
-                            try {
-                                count_array.push(await Teacher.findById(entry.teacher));
+                            per_id_scheds[entry.per_id] = {
+                                course_name: entry.course_name,
+                                teacher_name: teacher_entry.name
+                            }
+
+                            count_array.push(await Teacher.findById(entry.teacher));
                                 if (count_array.length === schedule.length) {
-                                    console.log(body);
-                                    body += '<p>Thanks</p>'
-                                    body += '<p>MailerBot</p>'
-                                    SEND_MAIL(user.email, subject, body);
+                                    // console.log(body);
+                                    // body += '<p>Thanks</p>'
+                                    // body += '<p>MailerBot</p>'
+                                    SEND_MAIL(user.email, subject, per_id_scheds);
                                     console.log("complete for user", user.email)
                                 }
+
+                            try {
+                                
                             }
                             catch (error) {
                                 console.log("Error in setting up data for mail to ", user.email);
@@ -180,6 +255,7 @@ router.get('/start_engine', async (req, res, next) => {
     }
 
 
+    return res.status(200).send("Complete")
 
 })
 
