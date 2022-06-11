@@ -42,32 +42,29 @@ function SEND_MAIL(destination, subject, per_id_scheds) {
     body += '<td style="border: 1px solid grey; padding: 20px">Course</td>'
     body += '<td style="border: 1px solid grey; padding: 20px">Professor</td>'
     body += '</tr>'
-    
+
     // hardcoded
     var pers = ['1', '2', '3', '4', '5', '6', '7', '8']
 
     // forming the body
-    pers.forEach((per_id, index) => 
-    {
-        if (per_id in per_id_scheds)
-        {
+    pers.forEach((per_id, index) => {
+        if (per_id in per_id_scheds) {
             body += '<tr style="color: grey; border: 1px solid grey;">'
             body += '<td style="border: 1px solid grey; padding: 5px">' + per_id + '</td>'
             body += '<td style="border: 1px solid grey; padding: 5px">' + per_id_scheds[per_id].course_name + '</td>'
             body += '<td style="border: 1px solid grey; padding: 5px">' + per_id_scheds[per_id].teacher_name + '</td>'
             body += '</tr>'
         }
-        else
-        {
+        else {
             body += '<tr style="color: green; border: 1px solid grey;">'
             body += '<td style="border: 1px solid grey; padding: 5px">' + per_id + '</td>'
             body += '<td style="border: 1px solid grey; padding: 5px">Free</td>'
             body += '<td style="border: 1px solid grey; padding: 5px">Free</td>'
-            body += '</tr>' 
+            body += '</tr>'
         }
-        
+
     })
-    
+
     body += '</table>'
 
     body += '<p>Thanks</p>'
@@ -81,7 +78,7 @@ function SEND_MAIL(destination, subject, per_id_scheds) {
 
     body += "<p>Jokes apart, we really appreciate any input</p>"
 
-    
+
 
 
     console.log('sending to ', destination)
@@ -220,16 +217,16 @@ router.get('/start_engine', async (req, res, next) => {
                             }
 
                             count_array.push(await Teacher.findById(entry.teacher));
-                                if (count_array.length === schedule.length) {
-                                    // console.log(body);
-                                    // body += '<p>Thanks</p>'
-                                    // body += '<p>MailerBot</p>'
-                                    SEND_MAIL(user.email, subject, per_id_scheds);
-                                    console.log("complete for user", user.email)
-                                }
+                            if (count_array.length === schedule.length) {
+                                // console.log(body);
+                                // body += '<p>Thanks</p>'
+                                // body += '<p>MailerBot</p>'
+                                SEND_MAIL(user.email, subject, per_id_scheds);
+                                console.log("complete for user", user.email)
+                            }
 
                             try {
-                                
+
                             }
                             catch (error) {
                                 console.log("Error in setting up data for mail to ", user.email);

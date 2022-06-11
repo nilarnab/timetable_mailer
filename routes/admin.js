@@ -16,21 +16,24 @@ function pp() {
 }
 router.get("/mywork", async (req, res, next) => {
     // console.log(await Users.find({ email: "vishnumali3911@gmail.com" }));
-    console.log(await Users.find({}));
-    if (1) {
-        pp();
-    }
-    // if ((await Users.updateOne({ email: "vishnumali3911@gmail.com" },
-    //     { $set: { super: 1 } }))) {
-    //     console.log("updated");
+    // console.log(await College.find({}));
+    // console.log(await Branch.find({}));
+    console.log(await Year.find({}));
+    // if (1) {
+    //     pp();
     // }
+    if ((await Users.updateOne({ email: "vishnumali3911@gmail.com" },
+        { $set: { super: 0 } }))) {
+        console.log("updated");
+        console.log(await Users.find({ email: "vishnumali3911@gmail.com" }));
+    }
     // const newRelation=new Relation({
     //     branch_id: '62a0b95ed86d79902c0c661d',
     //     college_id: '62a0b81a1581908370fd3ec8',
     //     year_id: '62a0efdf5f57a39d74c6dfbc'
     //     name :
     // })
-
+    res.send("done");
 })
 router.get('/home', middleware.auth, async (req, res, next) => {
     if (req.session.message) {
@@ -105,25 +108,28 @@ router.get('/make_table', middleware.auth, async (req, res, next) => {
 
 // post requests
 router.post('/handle_add_college', middleware.auth_super, async (req, res, next) => {
-
+    console.log("Trying to add new college");
+    console.log(req.body.name);
     const college = new College(
         {
             name: req.body.name
         }
     )
+    if ((await College.find(college)).length == 0) {
+        try {
+            const new_college = await college.save()
+            req.session.message = "Done"
+        }
 
-
-    try {
-        const new_college = await college.save()
-        req.session.message = "Done"
+        catch {
+            // req.session.message = "Did not work";
+        }
     }
-
-    catch
-    {
-        req.session.message = "Did not work";
+    else {
+        req.session.message = "A college with same name already present."
     }
-
     res.redirect('/admin/home');
+
 
 
 })
@@ -137,16 +143,48 @@ router.post('/handle_add_branch', middleware.auth_super, async (req, res, next) 
         }
     )
 
+    if ((await Branch.find(branch)).length === 0) {
+        try {
+            const new_branch = await branch.save()
+            req.session.message = "Done"
+        }
 
-    try {
-        const new_branch = await branch.save()
-        req.session.message = "Done"
+        catch
+        {
+            // req.session.message = "Did not work"
+        }
     }
+    else {
+        req.session.message = "Branch already added";
+    }
+    console.log(req.session.message);
+    res.redirect('/admin/home');
 
-    catch
-    {
-        req.session.message = "Did not work"
+
+})
+router.post('/handle_add_year', middleware.auth_super, async (req, res, next) => {
+
+    const year = new Year(
+        {
+            name: req.body.name
+        }
+    )
+    console.log(year);
+    if ((await Year.find(year)).length === 0) {
+        try {
+            const new_branch = await year.save()
+            req.session.message = "Done"
+        }
+
+        catch
+        {
+            // req.session.message = "Did not work";
+        }
     }
+    else {
+        req.session.message = "Year already added";
+    }
+    console.log(req.session.message);
 
     res.redirect('/admin/home');
 
@@ -159,16 +197,15 @@ router.post('/get_existing_data', async (req, res, next) => {
     // find if has access of the table
     var access = 1
 
-    var old_table = await Table.find({ name: req.body.name })
-
+    var old_table = await Relation.find({ name: req.body.name });
+    console.log("rip", old_table);
     if (req.session.super == 0) {
         if (old_table.length > 0) {
             // table already exists
-
             // finding if it is the batch table
             if (req.session.branch == old_table[0].branch_id
                 && req.session.college == old_table[0].college_id
-                && req.session.year == old_table[0].year_id) {
+                && req.session.year == old_table[0].year_id && req.session.role === 1) {
 
             }
 
@@ -244,17 +281,17 @@ router.post('/handle_add_teacher', async (req, res, next) => {
 router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, next) => {
     // fiding if access is there
     var access = 1
-
-    var old_table = await Table.find({ table_name: req.body.name })
+    var old_table = await Relation.find({ name: req.body.name })
 
     if (req.session.super == 0) {
         if (old_table.length > 0) {
             // table already exists
 
             // finding if it is the batch table
-            if (req.session.branch == old_table[0].branch_id
+            console.log(req.session.branch, old_table[0].branch_id, req.session.college, old_table[0].college_id, req.session.year, old_table[0].year_id);
+            if (req.session.branch, old_table[0].branch_id
                 && req.session.college == old_table[0].college_id
-                && req.session.year == old_table[0].year_id) {
+                && req.session.year == old_table[0].year_id && req.session.role === 1) {
 
             }
 
@@ -337,16 +374,16 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
 
 
 
-        try {
+        // try {
 
-            const new_entry_ret = await new_entry.save()
-            return res.json({ verdict: true })
-        }
+        const new_entry_ret = await new_entry.save()
+        return res.json({ verdict: true })
 
-        catch
-        {
-            return res.json({ verdict: false, message: "Did not work" })
-        }
+        // }
+        // catch
+        // {
+        //     return res.json({ verdict: false, message: "Did not work" })
+        // }
 
     }
 
@@ -355,29 +392,22 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
 
 })
 
-router.post('/handle_add_college', middleware.auth_super, async (req, res, next) => {
-
-    const college = new College(
-        {
-            name: req.body.name
-        }
-    )
-
-
-    try {
-        const new_college = await college.save()
-        req.session.message = "Done"
-    }
-
-    catch
-    {
-        req.session.message = "Did not work"
-    }
-
-    res.redirect('/admin/home');
-
-
-})
+// router.post('/handle_add_college', middleware.auth_super, async (req, res, next) => {
+//     const college = new College(
+//         {
+//             name: req.body.name
+//         }
+//     )
+//     try {
+//         const new_college = await college.save()
+//         req.session.message = "Done"
+//     }
+//     catch
+//     {
+//         req.session.message = "Did not work"
+//     }
+//     res.redirect('/admin/home');
+// })
 
 
 
