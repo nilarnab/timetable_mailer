@@ -7,7 +7,8 @@ const Schedule = require("../models/schedule")
 const Table = require("../models/tables")
 const Year = require("../models/years")
 const Users = require('../models/users');
-const Relation = require("../models/BatchTableRel")
+const Relation = require("../models/BatchTableRel");
+const session = require('express-session');
 middleware = require("../middlewares/auth.js")
 
 const router = express.Router();
@@ -59,6 +60,10 @@ router.get('/home', middleware.auth, async (req, res, next) => {
     console.log(req.session)
 
 
+    // finding all the tables of the batch
+    var all_tables = await Table.find({'branch_id': req.session.branch, 'college_id': req.session.college, 'year_id': req.session.year})
+
+
     return res.render("../views/admin.ejs", {
         message: message,
         days: days_array,
@@ -67,7 +72,8 @@ router.get('/home', middleware.auth, async (req, res, next) => {
         user: req.session,
         branches: branches,
         colleges: colleges,
-        years: years
+        years: years,
+        all_tables: all_tables
     })
 
 });

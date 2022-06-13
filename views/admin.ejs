@@ -73,6 +73,30 @@
         </div>
 
     </div>
+    
+    <br>
+    
+    <div class="row">
+        <div class="add_teacher col-sm-6">
+            <form action="admin/handle_link" method="post">
+
+                <p>Select a table to link</p>
+                <select class="from-group" name="table_id" style="width: 80%; padding: 5px;">
+                    <% all_tables.forEach((table, index) =>
+                    {
+                        %>
+                        <option value="<%= table._id.toString() %>"><%= table.name %></option>></option>
+                        <%
+                    }) %>
+        
+                </select>
+
+                <button class="btn btn-default" type="submit">Link</button>
+
+
+            </form>
+        </div>
+    </div>
 
 
     <% 
