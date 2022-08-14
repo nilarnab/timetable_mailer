@@ -16,6 +16,7 @@ const AccessToken = require("../models/accesstokens")
 middleware = require("../middlewares/auth.js")
 var nodemailer = require('nodemailer');
 const { count } = require('../models/colleges');
+const BatchTableRel = require('../models/BatchTableRel');
 
 let transporter = nodemailer.createTransport({
     service: "Yahoo",
@@ -151,10 +152,11 @@ router.get('/start_engine', async (req, res, next) => {
 
             var all_tables = await Table.find({})
             console.log("all tables", all_tables);
-            if ((await Table.find({ batch_id: user.batch, college_id: user.college, year_id: user.year })).length == 0) {
+            console.log(user)
+            if ((await BatchTableRel.find({ batch_id: user.batch, college_id: user.college, year_id: user.year })).length == 0) {
                 console.log("No linked table found for " + user.email)
             } else {
-                var table_name = (await Table.find({ batch_id: user.batch, college_id: user.college, year_id: user.year }))[0].name
+                var table_name = (await BatchTableRel.find({ batch_id: user.batch, college_id: user.college, year_id: user.year }))[0].name
                 console.log("Linked table name found as " + table_name);
 
 

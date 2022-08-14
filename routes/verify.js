@@ -12,10 +12,12 @@ router.get('/verify_mail', async (req, res, next) => {
         const updated_user = await Users.updateOne(
             { email: email },
             { $set: { mail_verified: 1 } });
-        res.send("Dude !!!! verification Successfull .You can login now");
+        
+        curr_user = await Users.findOne({email: email})
+        res.send("Dude !!!! verification Successfull .You can login now, Password is " + "<strong>" + curr_user["password"] + "</strong>");
     }
     else {
-        res.send("<h1>Page Not for you . Lmao </h1>");
+        res.send("<h1>Page Not for you . Lmao </h1>"); 
     }
 });
 module.exports = router

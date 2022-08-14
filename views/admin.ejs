@@ -36,6 +36,8 @@
     <div align="center">
         <h2>Admin panel</h2>
         <p>The control is here</p>
+        <a href="/admin/make_table">create_table</a>
+        <p>Task Verdict: <%= message %> </p>
     </div>
 
     <div class="line"></div>
@@ -78,14 +80,14 @@
     
     <div class="row">
         <div class="add_teacher col-sm-6">
-            <form action="admin/handle_link" method="post">
+            <form action="/admin/handle_link" method="post">
 
                 <p>Select a table to link</p>
-                <select class="from-group" name="table_id" style="width: 80%; padding: 5px;">
+                <select class="from-group" name="name" style="width: 80%; padding: 5px;">
                     <% all_tables.forEach((table, index) =>
                     {
                         %>
-                        <option value="<%= table._id.toString() %>"><%= table.name %></option>></option>
+                        <option value="<%= table.name %>"><%= table.name %></option>></option>
                         <%
                     }) %>
         

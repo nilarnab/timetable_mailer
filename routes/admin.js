@@ -9,6 +9,7 @@ const Year = require("../models/years")
 const Users = require('../models/users');
 const Relation = require("../models/BatchTableRel");
 const session = require('express-session');
+const BatchTableRel = require('../models/BatchTableRel');
 middleware = require("../middlewares/auth.js")
 
 const router = express.Router();
@@ -278,6 +279,68 @@ router.post('/handle_add_teacher', async (req, res, next) => {
     console.log("now session")
     console.log(req.session)
     console.log('/')
+
+    res.redirect('/admin/home');
+
+
+})
+
+
+router.post('/handle_link', async (req, res, next) => {
+
+    /*
+        First, have to find if a link already exists
+
+        if not create one
+        else
+        just update it
+    */
+
+    console.log("handling a new link");
+    console.log("got ");
+    console.log(req.body)
+
+    var old_link = await BatchTableRel.find({branch_id: req.session.branch_id, college_id: req.session.college_id, year_id: req.session.year_id});
+
+    console.log("old link found as ")
+    console.log(old_link)
+    console.log("session as")
+    console.log(req.session)
+
+    if (old_link.length >= 1)
+    {
+        // link already exists, update it
+        console.log("link already exists")
+        var updated_link = BatchTableRel.updateOne(
+            {
+                branch_id: req.session.branch, 
+                college_id: req.session.college, 
+                year_id: req.session.year
+            }, 
+            {
+                name: req.body.name
+            }
+            );
+
+        
+    }
+
+    else
+    {
+        console.log("making a new link");
+        var new_link = new BatchTableRel(
+            {
+                name: req.body.name,
+                branch_id: req.session.branch, 
+                college_id: req.session.college, 
+                year_id: req.session.year
+            }
+        )
+
+        const new_link_ret = await new_link.save()
+    }
+
+    req.session.message = "Done"
 
     res.redirect('/admin/home');
 
