@@ -20,12 +20,15 @@ router.get("/start_monitoring", async (req, res, next) => {
 
     console.log("Starting monitoring")
 
+    timeStamp = Date.now();
+
     // registeration monitoring
     regCount = await (await Users.find({})).length
     regCountEntry = new Monitor(
         {
             name: "REG",
-            count: 1
+            count: 1,
+            timestamp: timeStamp
         }
     )
     regCountEntry.save();
@@ -35,7 +38,8 @@ router.get("/start_monitoring", async (req, res, next) => {
     activeRegEntry = new Monitor(
         {
             name: "REG_CONF",
-            count: 1
+            count: 1,
+            timestamp: timeStamp
         }
     )
     activeRegEntry.save();
