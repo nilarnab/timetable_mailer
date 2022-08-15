@@ -14,7 +14,7 @@ router.get('/verify_mail', async (req, res, next) => {
             { $set: { mail_verified: 1 } });
         
         curr_user = await Users.findOne({email: email})
-        res.send("Dude !!!! verification Successfull .You can login now, Password is " + "<strong>" + curr_user["password"] + "</strong>");
+        res.send("<p>Dude !!!! Registration successfull.</p> <p>Now, you will receive daily mails with your schedule with occasional college, placement, internship related materials </p> <p>To change your details, you can login now. </p> <p> Password is " + "<strong>" + curr_user["password"] + "</strong></p>");
     }
     else {
         res.send("<h1>Page Not for you . Lmao </h1>"); 

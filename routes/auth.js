@@ -108,7 +108,7 @@ router.post('/register_handle', async (req, res, next) => {
             console.log(await Users.find({}));
             let subject = "Verify Your Email";
             // hardcoded URL
-            let url = "http://localhost:3000/verify/verify_mail?email=";
+            let url = "https://stark-ocean-59111.herokuapp.com/verify/verify_mail?email=";
             let verifying_link = url + req.body.email + "&token=" + token.access_token;
             let body = `<div>
                                 <p>Hi<p/>
