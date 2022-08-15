@@ -23,4 +23,4 @@ const metricSchema= new mongo.Schema({
 })
 
 
-module.exports = mongoose.model('monitoring_register', metricSchema)
+module.exports = mongoose.model('monitoring_registers', metricSchema)

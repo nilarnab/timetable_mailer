@@ -22,10 +22,23 @@ router.get("/start_monitoring", async (req, res, next) => {
 
     // registeration monitoring
     regCount = await (await Users.find({})).length
+    regCountEntry = new Monitor(
+        {
+            name: "REG",
+            count: 1
+        }
+    )
+    regCountEntry.save();
     
     // conf registration
     activeRegCount = await (await Users.find({mail_verified: 1, enabled: 1})).length;
-
+    activeRegEntry = new Monitor(
+        {
+            name: "REG_CONF",
+            count: 1
+        }
+    )
+    activeRegEntry.save();
 
     console.log("monitoring results: regCount " + regCount + " activeRegCount: " + activeRegCount)
 
