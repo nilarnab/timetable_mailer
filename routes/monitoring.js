@@ -27,7 +27,7 @@ router.get("/start_monitoring", async (req, res, next) => {
     regCountEntry = new Monitor(
         {
             name: "REG",
-            count: 1,
+            count: regCount,
             timestamp: timeStamp
         }
     )
@@ -38,7 +38,7 @@ router.get("/start_monitoring", async (req, res, next) => {
     activeRegEntry = new Monitor(
         {
             name: "REG_CONF",
-            count: 1,
+            count: activeRegCount,
             timestamp: timeStamp
         }
     )
