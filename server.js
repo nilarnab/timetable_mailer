@@ -3,16 +3,10 @@ const res = require('express/lib/response');
 const session = require('express-session');
 require('dotenv').config()
 const app = express()
+
 var nodemailer = require('nodemailer');
 
-let transporter = nodemailer.createTransport({
-    service: "Yahoo",
-    secure: true,
-    auth: {
-        user: process.env.MAILING_EMAIL,
-        pass: process.env.MAILING_PASSWORD,
-    },
-});
+
 //sending mail
 function SEND_MAIL(destination, subject, body) {
     console.log("sending mail");
@@ -30,6 +24,20 @@ function SEND_MAIL(destination, subject, body) {
         }
     });
 }
+
+
+let transporter = nodemailer.createTransport({
+    service: "Yahoo",
+    secure: true,
+    auth: {
+        user: process.env.MAILING_EMAIL,
+        pass: process.env.MAILING_PASSWORD,
+    },
+});
+
+
+
+
 // sendOtp(email);        <== to send mail 
 
 
@@ -90,12 +98,14 @@ const authRouter = require('./routes/auth.js');
 const userRouter = require('./routes/user.js');
 const engineRouter = require('./routes/cronEngine.js');
 const verifyRouter = require('./routes/verify.js');
+const monitorRouter = require('./routes/monitoring.js');
 
 app.use('/admin', adminRouters);
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/cronEngine', engineRouter)
 app.use('/verify', verifyRouter);
+app.use('/monitor', monitorRouter);
 
 module.exports = { SEND_MAIL };
-app.listen(process.env.PORT || 5000)
+app.listen(process.env.PORT || 3000)
