@@ -111,8 +111,10 @@ router.post('/register_handle', async (req, res, next) => {
             let url = "http://localhost:3000/verify/verify_mail?email=";
             let verifying_link = url + req.body.email + "&token=" + token.access_token;
             let body = `<div>
-                                <h1 style="text-align:center">Hello<h1/>
-                                <h2 style="color:green">Click on the given link to verify your mail ${verifying_link}<h2/>
+                                <p>Hi<p/>
+                                <p>Thank you very much for registering, we really mean it !</p>
+                                <p>Click on the given link to verify your mail ${verifying_link}<p/>
+                                <p>Your password after verification will be <strong>${pass_gen}</strong> </p>
                             <div/>`;
             SEND_MAIL(req.body.email, subject, body);
             console.log("done");
