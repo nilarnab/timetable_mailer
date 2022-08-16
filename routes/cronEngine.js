@@ -1,6 +1,8 @@
 const express = require('express');
 const res = require('express/lib/response');
-const { json } = require('express/lib/response');
+const {
+    json
+} = require('express/lib/response');
 const router = express.Router();
 const Users = require('../models/users');
 const College = require("../models/colleges")
@@ -15,7 +17,9 @@ const Teacher = require("../models/teachers")
 const AccessToken = require("../models/accesstokens")
 middleware = require("../middlewares/auth.js")
 var nodemailer = require('nodemailer');
-const { count } = require('../models/colleges');
+const {
+    count
+} = require('../models/colleges');
 const BatchTableRel = require('../models/BatchTableRel');
 
 let transporter = nodemailer.createTransport({
@@ -27,7 +31,7 @@ let transporter = nodemailer.createTransport({
     },
 });
 //sending mail
-function SEND_MAIL(destination, subject, per_id_scheds) {
+function SEND_MAIL(destination, subject, per_id_scheds, token) {
 
     var body = ''
 
@@ -55,8 +59,7 @@ function SEND_MAIL(destination, subject, per_id_scheds) {
             body += '<td style="border: 1px solid grey; padding: 5px">' + per_id_scheds[per_id].course_name + '</td>'
             body += '<td style="border: 1px solid grey; padding: 5px">' + per_id_scheds[per_id].teacher_name + '</td>'
             body += '</tr>'
-        }
-        else {
+        } else {
             body += '<tr style="color: green; border: 1px solid grey;">'
             body += '<td style="border: 1px solid grey; padding: 5px">' + per_id + '</td>'
             body += '<td style="border: 1px solid grey; padding: 5px">Free</td>'
@@ -79,6 +82,10 @@ function SEND_MAIL(destination, subject, per_id_scheds) {
 
     body += "<p>Jokes apart, we really appreciate any input</p>"
 
+    body += "<p>Also, if you want to, you may <a href="+ process.env.BASE_URL +"/verify/act_by_link?email=" + destination +"&token=" + token + "&action=LOGIN>Login</a></p>"
+    body += "<p>Also, if you want to, you may <a href="+ process.env.BASE_URL +"/verify/act_by_link?email=" + destination +"&token=" + token + "&action=SEMI_UNSUSCRIBE>I dont need the schedules, but I would like the study materials that are often sent</a></p>"
+    body += "<p>Also, if you want to, you may <a href="+ process.env.BASE_URL +"/verify/act_by_link?email=" + destination +"&token=" + token + "&action=UNSUSCRIBE>I guess it is time to say goodbye. I want to unsuscribe</a></p>"
+    body += "<p>Also, if you want to, you may <a href="+ process.env.BASE_URL +"/verify/act_by_link?email=" + destination +"&token=" + token + "&action=ENABLE>I had by mistake unsuscribed, I want to suscribe</a></p>"
 
 
 
@@ -124,7 +131,9 @@ router.get('/start_engine', async (req, res, next) => {
     // validation for request
     engineKey = req.query.engineKey;
 
-    if ((await Resource.find({ engineKey: engineKey })).length === 0) {
+    if ((await Resource.find({
+            engineKey: engineKey
+        })).length === 0) {
         return res.status(403).send('Forbidden')
     } else {
 
@@ -143,107 +152,106 @@ router.get('/start_engine', async (req, res, next) => {
         // for each user
         users.forEach(async (user, index) => {
             console.log('Trying to mail ' + user.email);
-            // fiding appropriate table
-            // var table_name = await Relation.find({
-            //     batch_id: user.batch,
-            //     college_id: user.college,
-            //     year_id: user.year
-            // })
 
-            var all_tables = await Table.find({})
-            console.log("all tables", all_tables);
-            console.log(user)
-            if ((await BatchTableRel.find({ batch_id: user.batch, college_id: user.college, year_id: user.year })).length == 0) {
-                console.log("No linked table found for " + user.email)
-            } else {
-                var table_name = (await BatchTableRel.find({ batch_id: user.batch, college_id: user.college, year_id: user.year }))[0].name
-                console.log("Linked table name found as " + table_name);
+            if (user.enabled == 1) {
+                console.log("user enabled")
+                var all_tables = await Table.find({})
+                console.log("all tables", all_tables);
+                console.log(user)
+                if ((await BatchTableRel.find({
+                        batch_id: user.batch,
+                        college_id: user.college,
+                        year_id: user.year
+                    })).length == 0) {
+                    console.log("No linked table found for " + user.email)
+                } else {
+                    var table_name = (await BatchTableRel.find({
+                        batch_id: user.batch,
+                        college_id: user.college,
+                        year_id: user.year
+                    }))[0].name
+                    console.log("Linked table name found as " + table_name);
+                    var schedule = [];
+                    var per_ids_array = ['1', '2', '3', '4', '5', '6', '7', '8']
+                    var cnt = 0
 
+                    per_ids_array.forEach(async (per_id, index) => {
 
-                var schedule = [];
-
-                var per_ids_array = ['1', '2', '3', '4', '5', '6', '7', '8']
-
-                var cnt = 0
-
-                per_ids_array.forEach(async (per_id, index) => {
-
-                    var schedule_entry = await Schedule.find({
-                        table_name: table_name,
-                        day: day,
-                        per_id: per_id
-                    })
-
-                    cnt += 1
-                    console.log('cnt is ' + cnt)
-
-                    if (schedule_entry.length == 0) {
-
-                    } else {
-                        console.log('shedule entry')
-                        schedule_entry = schedule_entry[0]
-                        console.log(schedule_entry)
-
-                        schedule.push({
-                            'per_id': per_id,
-                            'teacher': schedule_entry.teacher,
-                            course_name: schedule_entry.course_name
+                        var schedule_entry = await Schedule.find({
+                            table_name: table_name,
+                            day: day,
+                            per_id: per_id
                         })
 
-                        console.log('taking in ' + console.log(schedule_entry.teacher))
+                        cnt += 1
+                        console.log('cnt is ' + cnt)
 
-                    }
+                        if (schedule_entry.length == 0) {
 
-                    if (cnt == per_ids_array.length) {
+                        } else {
+                            console.log('shedule entry')
+                            schedule_entry = schedule_entry[0]
+                            console.log(schedule_entry)
 
-                        console.log('count complete')
+                            schedule.push({
+                                'per_id': per_id,
+                                'teacher': schedule_entry.teacher,
+                                course_name: schedule_entry.course_name
+                            })
 
+                            console.log('taking in ' + console.log(schedule_entry.teacher))
 
-                        console.log('gathered data')
-                        console.log(schedule)
+                        }
 
-                        var subject = 'Your timetable today'
-                        // var body = '<h4>Hi</h4><p>Your schedule today</p>'
+                        if (cnt == per_ids_array.length) {
 
-                        console.log('in busy loading')
-                        var count_array = [];
-                        var per_id_scheds = {};
-
-                        schedule.forEach(async (entry, index) => {
-                            var teacher_entry = await Teacher.findById(entry.teacher);
-                            // body += '<p>at period: ' + entry.per_id + ' you have ' + entry.course_name + ' by ' + teacher_entry.name + '</p>'
-
-                            per_id_scheds[entry.per_id] = {
-                                course_name: entry.course_name,
-                                teacher_name: teacher_entry.name
-                            }
-
-                            count_array.push(await Teacher.findById(entry.teacher));
-                            if (count_array.length === schedule.length) {
-                                // console.log(body);
-                                // body += '<p>Thanks</p>'
-                                // body += '<p>MailerBot</p>'
-                                SEND_MAIL(user.email, subject, per_id_scheds);
-                                console.log("complete for user", user.email)
-                            }
-
-                            try {
-
-                            }
-                            catch (error) {
-                                console.log("Error in setting up data for mail to ", user.email);
-                            }
-                        });
-                    }
+                            console.log('count complete')
 
 
-                })
+                            console.log('gathered data')
+                            console.log(schedule)
+
+                            var subject = 'Your timetable today'
+                            // var body = '<h4>Hi</h4><p>Your schedule today</p>'
+
+                            console.log('in busy loading')
+                            var count_array = [];
+                            var per_id_scheds = {};
+
+                            schedule.forEach(async (entry, index) => {
+                                var teacher_entry = await Teacher.findById(entry.teacher);
+                                // body += '<p>at period: ' + entry.per_id + ' you have ' + entry.course_name + ' by ' + teacher_entry.name + '</p>'
+
+                                per_id_scheds[entry.per_id] = {
+                                    course_name: entry.course_name,
+                                    teacher_name: teacher_entry.name
+                                }
+
+                                count_array.push(await Teacher.findById(entry.teacher));
+                                if (count_array.length === schedule.length) {
+                                    
+                                    SEND_MAIL(user.email, subject, per_id_scheds, user.token);
+                                    console.log("complete for user", user.email)
+                                }
+
+                                try {
+
+                                } catch (error) {
+                                    console.log("Error in setting up data for mail to ", user.email);
+                                }
+                            });
+                        }
+
+
+                    })
 
 
 
 
 
 
+
+                }
 
             }
 

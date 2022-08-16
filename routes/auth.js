@@ -84,6 +84,9 @@ router.post('/register_username_validation', async (req, res, next) => {
 router.post('/register_handle', async (req, res, next) => {
     console.log(req.body);
     var pass_gen = req.body.email + (Math.floor(Math.random() * 1000000));
+    
+
+
     const user = new Users({
         email: req.body.email,
         college: req.body.college,
@@ -95,7 +98,8 @@ router.post('/register_handle', async (req, res, next) => {
         super: 0,
         password: pass_gen,
         enabled: 1,
-        mail_verified: 0
+        mail_verified: 0,
+        token: JSON.stringify(Math.floor(Math.random() * 100000000000000))
     })
     if ((await AccessToken.find({ email: req.body.email })).length === 0) {
         const token = new AccessToken({
@@ -108,7 +112,7 @@ router.post('/register_handle', async (req, res, next) => {
             console.log(await Users.find({}));
             let subject = "Verify Your Email";
             // hardcoded URL
-            let url = "https://stark-ocean-59111.herokuapp.com/verify/verify_mail?email=";
+            let url = process.env.BASE_URL + "/verify/verify_mail?email=";
             let verifying_link = url + req.body.email + "&token=" + token.access_token;
             let body = `<div>
                                 <p>Hi<p/>
@@ -130,15 +134,6 @@ router.post('/register_handle', async (req, res, next) => {
     }
 });
 
-// try {
-//     const new_user = await user.save();
-
-//     return res.json({ verdict: true })
-// }
-// catch (err) {
-//     return res.json({ verdict: false, message: 'Something went wrong' })
-// }
-
 router.post('/login_username_handle', async (req, res, next) => {
     if ((await Users.find({ 'email': req.body.email })).length === 1) {
         return res.json({ verdict: true });
@@ -147,8 +142,6 @@ router.post('/login_username_handle', async (req, res, next) => {
         console.log("user not exist");
         return res.json({ verdict: false, message: "no such email" });
     }
-
-    // ** if length > 1: return false, message: Unexpected situation, contact admin
 
 })
 
