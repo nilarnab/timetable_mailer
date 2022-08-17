@@ -67,7 +67,7 @@ router.get('/home', middleware.auth, async (req, res, next) => {
     // finding all the tables of the batch
     var all_tables = await Table.find({'branch_id': req.session.branch, 'college_id': req.session.college, 'year_id': req.session.year})
 
-    var linked_table = await Table.find(
+    var linked_table = await BatchTableRel.find(
         {
             branch_id: req.session.branch,
             year_id: req.session.year,
