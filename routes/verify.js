@@ -55,19 +55,19 @@ router.get("/act_by_link", async (req, res, next) => {
             {
 
                 // make enabled 0
-                var entryUpdate = await Users.updateOne({email: req.body.email}, {enabled: 0});
+                var entryUpdate = await Users.updateOne({email: req.query.email}, {enabled: 0});
                 res.send("We are so sorry to see you go that way")
 
             }
             else if (req.query.action == "SEMI_UNSUSCRIBE")
             {
-                var entryUpdate = await Users.updateOne({email: req.body.email}, {enabled: 2})
+                var entryUpdate = await Users.updateOne({email: req.query.email}, {enabled: 2})
                 res.send("You got it! we will now not send schedules and only send study materials from now")
             }
             
             else if (req.query.action == "ENABLE")
             {
-                var entryUpdate = await Users.updateOne({email: req.body.email}, {enabled: 1})
+                var entryUpdate = await Users.updateOne({email: req.query.email}, {enabled: 1})
                 res.send("Welcome back")
             }
 
