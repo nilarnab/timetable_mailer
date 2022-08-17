@@ -307,7 +307,7 @@ router.post('/handle_link', async (req, res, next) => {
     console.log("got ");
     console.log(req.body)
 
-    var old_link = await BatchTableRel.find({branch_id: req.session.branch_id, college_id: req.session.college_id, year_id: req.session.year_id});
+    var old_link = await BatchTableRel.find({branch_id: req.session.branch, college_id: req.session.college, year_id: req.session.year});
 
     console.log("old link found as ")
     console.log(old_link)
