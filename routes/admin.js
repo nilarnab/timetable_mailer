@@ -78,6 +78,12 @@ router.get('/home', middleware.auth, async (req, res, next) => {
     console.log("linked table found as")
     console.log(linked_table)
 
+    var linked_table_serve = "NONE"
+    if (linked_table.length > 0)
+    {
+        table_table_serve = linked_table[0]["name"]
+    }
+
     return res.render("../views/admin.ejs", {
         message: message,
         days: days_array,
@@ -88,7 +94,7 @@ router.get('/home', middleware.auth, async (req, res, next) => {
         colleges: colleges,
         years: years,
         all_tables: all_tables,
-        table_name: linked_table[0]["name"]
+        table_name: linked_table_serve
     })
 
 });
