@@ -325,7 +325,7 @@ router.post('/handle_link', async (req, res, next) => {
                 year_id: req.session.year
             }, 
             {
-                name: req.body.name
+                $set: {name: req.body.name}
             }
             );
 
