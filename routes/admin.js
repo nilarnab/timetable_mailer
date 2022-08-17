@@ -307,12 +307,27 @@ router.post('/handle_link', async (req, res, next) => {
     console.log("got ");
     console.log(req.body.name)
 
-    var old_link = await BatchTableRel.find({branch_id: req.session.branch, college_id: req.session.college, year_id: req.session.year});
+
+    var old_link = await BatchTableRel.find(
+        {
+            branch_id: req.session.branch, 
+            college_id: req.session.college, 
+            year_id: req.session.year
+        });
 
     console.log("old link found as ")
     console.log(old_link)
     console.log("session as")
     console.log(req.session)
+
+    console.log("deleting old entry if any")
+    BatchTableRel.deleteOne(
+        {
+            branch_id: req.session.branch, 
+            college_id: req.session.college, 
+            year_id: req.session.year
+        }
+    )
 
     if (old_link.length >= 1)
     {
