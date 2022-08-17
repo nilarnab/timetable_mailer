@@ -24,18 +24,20 @@ router.get('/verify_mail', async (req, res, next) => {
 
 router.get("/act_by_link", async (req, res, next) => {
 
-    if (req.body.email != "" && req.body.token != "" && req.body.action != "")
+    if (req.query.email != "" && req.query.token != "" && req.query.action != "")
     {
 
         // token check
-        userEntry = await Users.find({email: req.body.email, token: req.body.token})
+        console.log("checking token, email: " + req.query.email + " token: " + req.query.token)
+
+        userEntry = await Users.find({email: req.query.email, token: req.query.token})
         
         if (userEntry.length == 1)
         {
 
-            if (req.body.action == "LOGIN")
+            if (req.query.action == "LOGIN")
             {
-                var data = (await Users.find({ 'email': req.body.email }))[0];
+                var data = (await Users.find({ 'email': req.query.email }))[0];
 
                 req.session.email = data.email;
                 req.session.branch = data.branch;
@@ -49,21 +51,24 @@ router.get("/act_by_link", async (req, res, next) => {
                 res.redirect("/user/home")
 
             }
-            else if (req.body.action == "UNSUSCRIBE")
+            else if (req.query.action == "UNSUSCRIBE")
             {
 
                 // make enabled 0
                 var entryUpdate = await Users.updateOne({email: req.body.email}, {enabled: 0});
+                res.send("We are so sorry to see you go that way")
 
             }
-            else if (req.body.action == "SEMI_UNSUSCRIBE")
+            else if (req.query.action == "SEMI_UNSUSCRIBE")
             {
                 var entryUpdate = await Users.updateOne({email: req.body.email}, {enabled: 2})
+                res.send("You got it! we will now not send schedules and only send study materials from now")
             }
             
-            else if (req.body.action == "ENABLE")
+            else if (req.query.action == "ENABLE")
             {
                 var entryUpdate = await Users.updateOne({email: req.body.email}, {enabled: 1})
+                res.send("Welcome back")
             }
 
 

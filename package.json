@@ -18,7 +18,8 @@
     "mongoose": "^6.3.5",
     "nodemailer": "^6.7.5",
     "pm2": "^5.2.0",
-    "superagent": "^8.0.0"
+    "superagent": "^8.0.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"

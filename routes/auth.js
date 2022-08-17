@@ -9,6 +9,8 @@ const Year = require("../models/years")
 const AccessToken = require("../models/accesstokens")
 middleware = require("../middlewares/auth.js")
 
+var uuid = require('uuid');
+
 require('dotenv').config();
 // const mail = require('../server.js');
 var nodemailer = require('nodemailer');
@@ -85,7 +87,7 @@ router.post('/register_handle', async (req, res, next) => {
     console.log(req.body);
     var pass_gen = req.body.email + (Math.floor(Math.random() * 1000000));
     
-
+    var token_val = uuid.v1()
 
     const user = new Users({
         email: req.body.email,
@@ -99,7 +101,7 @@ router.post('/register_handle', async (req, res, next) => {
         password: pass_gen,
         enabled: 1,
         mail_verified: 0,
-        token: JSON.stringify(Math.floor(Math.random() * 100000000000000))
+        token: token_val
     })
     if ((await AccessToken.find({ email: req.body.email })).length === 0) {
         const token = new AccessToken({

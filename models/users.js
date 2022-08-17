@@ -41,6 +41,11 @@ const UsersSchema = new mongo.Schema({
     {
         type: Number,
         default: 1
+    },
+    token:
+    {
+        type: String,
+        required: true
     }
 
 })
