@@ -347,6 +347,29 @@ router.post('/handle_link', async (req, res, next) => {
 
 })
 
+router.post('/handle_new_table', middleware.auth_prvl_1, async (req, res, next) => {
+    // check if the table is already there
+
+    if ((await Table.find({ name: req.body.table_name })).length == 0) {
+        // make a new table
+        console.log('creating table')
+        var new_table = new Table(
+            {
+                name: req.body.table_name,
+                branch_id: req.session.branch,
+                college_id: req.session.college,
+                year_id: req.session.year
+            }
+        )
+
+        await new_table.save()
+    }
+    else
+    {
+        console.log("table already exists");
+    }
+})
+
 router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, next) => {
     // fiding if access is there
     var access = 1
@@ -379,22 +402,7 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
     }
 
 
-    // check if the table is already there
-
-    if ((await Table.find({ name: req.body.table_name })).length == 0) {
-        // make a new table
-        console.log('creating table')
-        var new_table = new Table(
-            {
-                name: req.body.table_name,
-                branch_id: req.session.branch,
-                college_id: req.session.college,
-                year_id: req.session.year
-            }
-        )
-
-        await new_table.save()
-    }
+    
 
 
     // first have to find if such an entry already exists

@@ -246,6 +246,21 @@
             $("#submit").click(function () {
 
 
+                // table making or updating
+                $.post("/admin/handle_new_table", {
+                    table_name: document.getElementById('table_name').value,
+                    course_name: document.getElementById(id + '_name').value,
+                    day: day,
+                    per_id: per_id,
+                    teacher: document.getElementById(id + '_teacher').value,
+                },
+                    function (data, status) {
+
+                       console.log("table created");
+
+                    });
+
+
                 var complete = 0
                 var cnt = 0
 
