@@ -326,7 +326,11 @@ router.post('/handle_link', async (req, res, next) => {
             branch_id: req.session.branch, 
             college_id: req.session.college, 
             year_id: req.session.year
-        }
+        }, function(err, obj) {
+            if (err) throw err;
+            console.log(obj.result.n + " document(s) deleted");
+            db.close();
+          }
     )
 
     console.log("making a new link");
