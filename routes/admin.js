@@ -98,18 +98,23 @@ router.get('/make_table', middleware.auth, async (req, res, next) => {
     var days_array = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
     var per_ids_array = ['1', '2', '3', '4', '5', '6', '7', '8']
 
+    var linked_table = await Table.find(
+        {
+            branch_id: req.session.branch,
+            year_id: req.session.year,
+            college_id: req.session.college
+        }
+    )
+
     // finding the data that already exists
-
-
-
-
 
     return res.render("../views/create_table.ejs", {
         message: message,
         days: days_array,
         per_ids: per_ids_array,
         teachers: all_teachers,
-        user: req.session
+        user: req.session,
+        table_name: linked_table[0]["name"]
     })
 })
 
