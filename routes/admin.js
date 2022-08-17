@@ -329,27 +329,7 @@ router.post('/handle_link', async (req, res, next) => {
         }
     )
 
-    if (old_link.length >= 1)
-    {
-        // link already exists, update it
-        console.log("link already exists")
-        var updated_link = BatchTableRel.updateOne(
-            {
-                branch_id: req.session.branch, 
-                college_id: req.session.college, 
-                year_id: req.session.year
-            }, 
-            {
-                $set: {name: req.body.name}
-            }
-            );
-
-        
-    }
-
-    else
-    {
-        console.log("making a new link");
+    console.log("making a new link");
         var new_link = new BatchTableRel(
             {
                 name: req.body.name,
@@ -359,8 +339,9 @@ router.post('/handle_link', async (req, res, next) => {
             }
         )
 
-        const new_link_ret = await new_link.save()
-    }
+    const new_link_ret = await new_link.save()
+
+    console.log("work complete")
 
     req.session.message = "Done"
 
