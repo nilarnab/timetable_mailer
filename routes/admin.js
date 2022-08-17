@@ -60,6 +60,13 @@ router.get('/home', middleware.auth, async (req, res, next) => {
 
     console.log(req.session)
 
+    
+
+
+
+    // finding all the tables of the batch
+    var all_tables = await Table.find({'branch_id': req.session.branch, 'college_id': req.session.college, 'year_id': req.session.year})
+
     var linked_table = await Table.find(
         {
             branch_id: req.session.branch,
@@ -68,11 +75,8 @@ router.get('/home', middleware.auth, async (req, res, next) => {
         }
     )
 
-
-
-    // finding all the tables of the batch
-    var all_tables = await Table.find({'branch_id': req.session.branch, 'college_id': req.session.college, 'year_id': req.session.year})
-
+    console.log("linked table found as")
+    console.log(linked_table)
 
     return res.render("../views/admin.ejs", {
         message: message,
