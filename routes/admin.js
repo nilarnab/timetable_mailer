@@ -381,7 +381,7 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
 
     // check if the table is already there
 
-    if ((await Table.find({ name: req.body.table_name })).length === 0) {
+    if ((await Table.find({ name: req.body.table_name })).length == 0) {
         // make a new table
         console.log('creating table')
         var new_table = new Table(
