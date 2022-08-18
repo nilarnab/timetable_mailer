@@ -11,6 +11,7 @@
     <div align="center">
         <input id="table_name" oninput="set_table()" placeholder="table name" required>
         <input type="number" id="total_batches" oninput="set_batch()" placeholder="Total number of batches" required>
+        <input id="batch_key" oninput="set_table()" placeholder="Batch Key" required>
     </div>
 
     <div class="cont" style="padding: 20px; overflow: auto; width: 95%; margin: auto">
@@ -66,12 +67,15 @@
                                     </select>
                                     
                                     Batches: 
-                                    <input id="<%= per_id + '_' + day + '_batches' %>" name="batches">
+                                    <div id="<%= per_id + '_' + day + '_batches' %>" class="btn btn-default"></div>
                                         
 
 
                                     <div id="<%= per_id + '_' + day + '_enable' %>" class="btn btn-default">DISABLED
                                     </div>
+
+                                    <button onclick="delete_entry('<%= per_id %>', '<%= day %>')" class="btn btn-danger">Delete</button>
+
                             </th>
 
                             <% }) %>
@@ -101,6 +105,27 @@
         // hardcoded
 
 
+        function delete_entry(per_id, day)
+        {
+            table_name = document.getElementById("table_name").value
+            batch_key = document.getElementById("batch_key").value
+
+            $.post("/admin/handle_delete_entry", {
+                table_name: table_name,
+                per_id: per_id,
+                day: day,
+                batch_key: batch_key
+            },
+                function (data, status) {
+
+                   console.log("Entry deletion");
+
+                   set_table()
+
+                });
+
+
+        }
 
         window.setInterval(() => {
             var days = []
@@ -180,13 +205,14 @@
                         <%
             });
         %> 
+
         var table_name = document.getElementById('table_name').value
 
             console.log("updating table")
 
             $.post('/admin/get_existing_data',
                 {
-                    name: table_name
+                    name: table_name,
                 },
                 (data, status) => {
                     console.log(data)
@@ -198,20 +224,20 @@
 
                     days.forEach((day, index_day) => {
                         per_ids.forEach((per_id, index) => {
-
+                            console.log(document.getElementById('batch_key').value)
                             var key = per_id + '_' + day
+                            var key_dict = key + '_' + document.getElementById('batch_key').value
 
-                            if (key in record) {
+                            if (key_dict in record) {
                                 console.log('reocrd already exists for ' + per_id + ' ' + day)
-                                document.getElementById(key + '_name').value = record[key].name
-                                document.getElementById(key + '_teacher').value = record[key].teacher
-                                document.getElementById(key + '_batches').value = record[key].valid_batches
-
+                                document.getElementById(key + '_name').value = record[key_dict].name
+                                document.getElementById(key + '_teacher').value = record[key_dict].teacher
+                                document.getElementById(key + '_batches').innerHTML = record[key_dict].valid_batches
                             }
                             else {
                                 document.getElementById(key + '_name').value = ''
                                 document.getElementById(key + '_teacher').value = 'none'
-                                document.getElementById(key + '_batches').value = ''
+                                document.getElementById(key + '_batches').innerHTML = ''
                             }
 
                         });
@@ -261,16 +287,9 @@
             }
         }
 
-        days.forEach((day, index_day) => {
-            per_ids.forEach((per_id, index) => {
+        document.getElementById('batch_key').value = batch_key
 
-                var key = per_id + '_' + day + '_batches'
-                
-                document.getElementById(key).value = batch_key
-                
-
-            });
-        });
+        set_table()
 
             
 
@@ -346,7 +365,7 @@
                                 day: day,
                                 per_id: per_id,
                                 teacher: document.getElementById(id + '_teacher').value,
-                                batch_key: document.getElementById(id + '_batches').value
+                                batch_key: document.getElementById('batch_key').value
                             },
                                 function (data, status) {
 

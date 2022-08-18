@@ -258,7 +258,7 @@ router.post('/get_existing_data', async (req, res, next) => {
 
 
         existings.forEach((existing, index) => {
-            record[existing.per_id + '_' + existing.day] = { 'name': existing.course_name, 'teacher': existing.teacher, 'valid_batches': existing.valid_batches }
+            record[existing.per_id + '_' + existing.day + '_' + existing.valid_batches] = { 'name': existing.course_name, 'teacher': existing.teacher, 'valid_batches': existing.valid_batches }
 
         })
 
@@ -363,6 +363,34 @@ router.post('/handle_link', async (req, res, next) => {
 
 })
 
+
+router.post('/handle_delete_entry', middleware.auth_prvl_1, async (req, res, next) => {
+    // check if the table is already there
+
+    console.log("deletion request got")
+    console.log(req.body)
+
+    Schedule.deleteOne(
+        {
+            table_name: req.body.table_name,
+            per_id: req.body.per_id,
+            day: req.body.day,
+            valid_batches: req.body.batch_key
+
+        }
+        , function(err, obj) {
+        if (err) throw err;
+        console.log(" document(s) deleted");
+      });
+
+    console.log("deletion complete");
+
+    return res.json({verdict: true})
+    
+
+})
+
+
 router.post('/handle_new_table', middleware.auth_prvl_1, async (req, res, next) => {
     // check if the table is already there
 
@@ -428,28 +456,41 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
         {
             table_name: req.body.table_name,
             day: req.body.day,
-            per_id: req.body.per_id
+            per_id: req.body.per_id,
+            valid_batches: req.body.batch_key
         }
     )
-
+    
+    console.log("old entry")
     console.log(old_entry)
+    console.log("request")
+    console.log(req.body)
 
     if (old_entry.length > 0) {
 
         console.log('updating entry');
 
+        if (old_entry[0].course_name == req.body.course_name && old_entry[0].teacher == req.body.teacher)
+        {
+            console.log("no changes required")
+            return res.json({verdict: true})
+        }
+
         var update_entry = await Schedule.updateOne(
             {
                 table_name: req.body.table_name,
                 day: req.body.day,
-                per_id: req.body.per_id
+                per_id: req.body.per_id,
+                valid_batches: req.body.batch_key
             },
             {
                 course_name: req.body.course_name,
                 teacher: req.body.teacher,
-                valid_batches: req.body.batch_key
+            }, function (err, obj)
+            {
+                console.log("updation complete")
             }
-        )
+        ).clone()
 
         return res.json({ verdict: true })
 
