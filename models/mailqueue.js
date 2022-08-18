@@ -2,45 +2,39 @@ const { Int32 } = require('mongodb')
 const { default: mongoose } = require('mongoose')
 const mongo = require('mongoose')
 
-const ScheduleSchema= new mongo.Schema({
+const mailqueueSchema= new mongo.Schema({
     
-    table_name: 
-    {
-        type: String,
-        required: true,
-    },
-
-    course_name: 
+    body: 
     {
         type: String,
         required: true
     },
-
-    teacher:
+    year: 
     {
         type: String,
         required: true
     },
-
-    day:
-    {
-        type: String,
-        required: true,
-    },
-
-    per_id:
+    branch:
     {
         type: String,
         required: true
     },
-
-    valid_batches: 
+    college:
     {
-        type: String
+        type: String,
+        required: true
+    },
+    predicted_affected:
+    {
+        type: Number
+    },
+    done:
+    {
+        type: Number,
+        default: 0
     }
-    
 
 })
 
 
-module.exports = mongoose.model('Schedules', ScheduleSchema)
+module.exports = mongoose.model('MailQueue', mailqueueSchema)

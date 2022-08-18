@@ -1,5 +1,6 @@
 const express = require('express');
 const res = require('express/lib/response');
+
 const {
     json
 } = require('express/lib/response');
@@ -15,6 +16,7 @@ const Schedule = require("../models/schedule")
 const Relation = require("../models/BatchTableRel")
 const Teacher = require("../models/teachers")
 const AccessToken = require("../models/accesstokens")
+const MailQueue = require("../models/mailqueue")
 middleware = require("../middlewares/auth.js")
 var nodemailer = require('nodemailer');
 const {
@@ -30,6 +32,25 @@ let transporter = nodemailer.createTransport({
         pass: process.env.MAILING_PASSWORD,
     },
 });
+
+function SEND_MAIL_CUSTOM(destination, subject, body) {
+    console.log("sending mail");
+    var mailOptions = {
+        from: process.env.MAILING_EMAIL,
+        to: destination,
+        subject: subject,
+        html: body
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
+
+
 //sending mail
 function SEND_MAIL(destination, subject, per_id_scheds, token) {
 
@@ -76,17 +97,13 @@ function SEND_MAIL(destination, subject, per_id_scheds, token) {
 
     body += '<br>'
     body += '<p>PS: This project is running as BETA and might not reflect sudden changes in schedule (Like professor deciding to take 2 extra classes simply because the day is beautiful) or any holiday (as of now!). However, if you want any upgrades, feel free to mail at</p>'
-    body += "<p>nilarnabdebnath@gmail.com</p>"
-    body += "<p>2020ucp1018@mnit.ac.in</p>"
-    body += "<p>(be nice in the mail, and you might even get a reply !!)</p>"
+    body += "<p>" + process.env.MAILING_EMAIL + "</p>"
+    body += "<p>" + "If there are holidays and stil the mail is coming or there is any other issue, feel free to reach out to us, we will surely reply (pinky promise : ) )"
 
-    body += "<p>Jokes apart, we really appreciate any input</p>"
-
-    body += "<p>Also, if you want to, you may <a href="+ process.env.BASE_URL +"/verify/act_by_link?email=" + destination +"&token=" + token + "&action=LOGIN>Login</a></p>"
-    body += "<p>Also, if you want to, you may <a href="+ process.env.BASE_URL +"/verify/act_by_link?email=" + destination +"&token=" + token + "&action=SEMI_UNSUSCRIBE>I dont need the schedules, but I would like the study materials that are often sent</a></p>"
-    body += "<p>Also, if you want to, you may <a href="+ process.env.BASE_URL +"/verify/act_by_link?email=" + destination +"&token=" + token + "&action=UNSUSCRIBE>I guess it is time to say goodbye. I want to unsuscribe</a></p>"
-    body += "<p>Also, if you want to, you may <a href="+ process.env.BASE_URL +"/verify/act_by_link?email=" + destination +"&token=" + token + "&action=ENABLE>I had by mistake unsuscribed, I want to suscribe</a></p>"
-
+    body += "<p>Also, if you want to, you may <a href=" + process.env.BASE_URL + "/verify/act_by_link?email=" + destination + "&token=" + token + "&action=LOGIN>Login</a></p>"
+    body += "<p>or <a href=" + process.env.BASE_URL + "/verify/act_by_link?email=" + destination + "&token=" + token + "&action=SEMI_UNSUSCRIBE>I dont need the schedules, but I would like the study materials that are often sent</a></p>"
+    body += "<p>or <a href=" + process.env.BASE_URL + "/verify/act_by_link?email=" + destination + "&token=" + token + "&action=UNSUSCRIBE>I guess it is time to say goodbye. I want to unsuscribe</a></p>"
+    body += "<p>and finally, <a href=" + process.env.BASE_URL + "/verify/act_by_link?email=" + destination + "&token=" + token + "&action=ENABLE>I had by mistake unsuscribed, I want to suscribe</a></p>"
 
 
     console.log('sending to ', destination)
@@ -189,18 +206,30 @@ router.get('/start_engine', async (req, res, next) => {
                         if (schedule_entry.length == 0) {
 
                         } else {
-                            console.log('shedule entry')
-                            schedule_entry = schedule_entry[0]
+                            
+                            // logic to be applied
+                            // if the user batch is in the array schedule_entry.batches
+                            console.log("checking if batch is valid, with user batch")
+                            console.log(user.batch)
+                            console.log("valid batches")
                             console.log(schedule_entry)
+                            console.log(schedule_entry[0].valid_batches.split("_"))
+                            if (schedule_entry[0].valid_batches.split("_").indexOf(user.batch) != -1)
+                            {
+                                console.log('shedule entry')
+                                schedule_entry = schedule_entry[0]
+                                console.log(schedule_entry)
 
-                            schedule.push({
-                                'per_id': per_id,
-                                'teacher': schedule_entry.teacher,
-                                course_name: schedule_entry.course_name
-                            })
+                                schedule.push({
+                                    'per_id': per_id,
+                                    'teacher': schedule_entry.teacher,
+                                    course_name: schedule_entry.course_name
+                                })
 
-                            console.log('taking in ' + console.log(schedule_entry.teacher))
+                                console.log('taking in ' + console.log(schedule_entry.teacher))
 
+
+                            }
                         }
 
                         if (cnt == per_ids_array.length) {
@@ -229,7 +258,7 @@ router.get('/start_engine', async (req, res, next) => {
 
                                 count_array.push(await Teacher.findById(entry.teacher));
                                 if (count_array.length === schedule.length) {
-                                    
+
                                     SEND_MAIL(user.email, subject, per_id_scheds, user.token);
                                     console.log("complete for user", user.email)
                                 }
@@ -263,6 +292,56 @@ router.get('/start_engine', async (req, res, next) => {
 
 
     return res.status(200).send("Complete")
+
+})
+
+
+router.get("/send_custom_mail", async (req, res, next) => {
+
+
+
+    var all_sendables = await MailQueue.find({done: 0});
+
+
+    all_sendables.forEach(async (batch_sendable, index) => {
+
+        if (batch_sendable.done == 0) {
+            var query = {}
+
+            if (batch_sendable.branch != 'all') {
+                query["branch"] = batch_sendable.branch
+            }
+
+            if (batch_sendable.year != 'all') {
+                query["year"] = batch_sendable.year
+            }
+
+            if (batch_sendable.college != 'all') {
+                query["college"] = batch_sendable.college
+            }
+
+            console.log("query")
+            console.log(query)
+
+            var all_users = await Users.find(query)
+
+            all_users.forEach((user_sendable, index) => {
+                SEND_MAIL_CUSTOM(user_sendable.email, "Study Materials", batch_sendable.body)
+            })
+
+            MailQueue.updateOne({_id: batch_sendable._id}, {done: 1}, function(err, res) {
+                if (err) throw err;
+                
+            })
+
+
+        }
+
+
+    })
+
+    return res.send("Complete")
+
 
 })
 

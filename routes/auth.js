@@ -94,6 +94,7 @@ router.post('/register_handle', async (req, res, next) => {
         college: req.body.college,
         branch: req.body.branch,
         year: req.body.year,
+        batch: req.body.batch,
 
         // necessary attributes
         role: 0,
@@ -159,8 +160,9 @@ router.post('/login_handle', async (req, res, next) => {
         req.session.year = data.year;
         req.session.role = data.role;
         req.session.super = data.super;
-        req.session.mailVerified = data.mail_verified
-        req.session.enabled = data.enabled
+        req.session.mailVerified = data.mail_verified;
+        req.session.enabled = data.enabled;
+        req.session.batch = data.batch;
 
         console.log('ssession set freshly')
         console.log(req.session)

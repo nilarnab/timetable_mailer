@@ -88,7 +88,7 @@
                     </div>
 
 
-                    <div class="col-sm-6 col-xm-12">
+                    <div class="col-sm-12 col-xm-12">
                         <div class="form-group">
                             <label for="branch">Branch: </label>
                             <select id="branch" class="form-control" name="branch">
@@ -113,6 +113,14 @@
                                     </option>
                                     <% }) %>
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-xm-12">
+                        <div class="form-group">
+                            <label for="batch">Batch: </label>
+                            <input type="number" id="batch" class="form-control" name="batch" placeholder="It should be a number (1 if you are A)">
+                                
                         </div>
                     </div>
 
@@ -205,7 +213,8 @@
                     email: document.getElementById('email').value,
                     college: document.getElementById('college').value,
                     branch: document.getElementById('branch').value,
-                    year: document.getElementById('year').value
+                    year: document.getElementById('year').value,
+                    batch: document.getElementById('batch').value
                 },
                     function (data, status) {
                         console.log(data);

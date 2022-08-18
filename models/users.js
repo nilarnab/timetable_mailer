@@ -46,8 +46,15 @@ const UsersSchema = new mongo.Schema({
     {
         type: String,
         required: true
+    },
+    batch: 
+    {
+        type: String,
+        required: true
     }
 
 })
 
 module.exports = mongoose.model('Users', UsersSchema)
+
+

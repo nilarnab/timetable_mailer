@@ -8,6 +8,7 @@ const Table = require("../models/tables")
 const Year = require("../models/years")
 const Users = require('../models/users');
 const Relation = require("../models/BatchTableRel");
+const MailQueue = require("../models/mailqueue")
 const session = require('express-session');
 const BatchTableRel = require('../models/BatchTableRel');
 middleware = require("../middlewares/auth.js")
@@ -81,7 +82,7 @@ router.get('/home', middleware.auth, async (req, res, next) => {
     var linked_table_serve = "NONE"
     if (linked_table.length > 0)
     {
-        table_table_serve = linked_table[0]["name"]
+        linked_table_serve = linked_table[0]["name"]
     }
 
     return res.render("../views/admin.ejs", {
@@ -257,7 +258,7 @@ router.post('/get_existing_data', async (req, res, next) => {
 
 
         existings.forEach((existing, index) => {
-            record[existing.per_id + '_' + existing.day] = { 'name': existing.course_name, 'teacher': existing.teacher }
+            record[existing.per_id + '_' + existing.day] = { 'name': existing.course_name, 'teacher': existing.teacher, 'valid_batches': existing.valid_batches }
 
         })
 
@@ -367,7 +368,8 @@ router.post('/handle_new_table', middleware.auth_prvl_1, async (req, res, next) 
 
     if ((await Table.find({ name: req.body.table_name })).length == 0) {
         // make a new table
-        console.log('creating table')
+        console.log('creating table with')
+        console.log(req.body)
         var new_table = new Table(
             {
                 name: req.body.table_name,
@@ -444,7 +446,8 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
             },
             {
                 course_name: req.body.course_name,
-                teacher: req.body.teacher
+                teacher: req.body.teacher,
+                valid_batches: req.body.batch_key
             }
         )
 
@@ -460,7 +463,9 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
                 course_name: req.body.course_name,
                 day: req.body.day,
                 per_id: req.body.per_id,
-                teacher: req.body.teacher
+                teacher: req.body.teacher,
+                valid_batches: req.body.batch_key
+            
             }
         )
 
@@ -483,6 +488,72 @@ router.post('/handle_new_schedule', middleware.auth_prvl_1, async (req, res, nex
 
 
 })
+
+
+
+// handling custom mails
+router.get("/send_custom_mails", middleware.auth_prvl_1, async (req, res, next) => 
+{
+
+    // getting super admin data
+    var branches = await Branch.find({})
+    var colleges = await College.find({})
+    var years = await Year.find({})
+    var message = req.session.message
+
+    return res.render("../views/customMail.ejs", {
+        branches: branches,
+        colleges: colleges,
+        years: years,
+        message: message
+    })
+})
+
+router.post("/handle_custom_mail", middleware.auth_prvl_1, async (req, res, next) => {
+
+    
+    var query = {}
+
+    if (req.body.branch != 'all')
+    {
+        query["branch"] = req.body.branch
+    }
+
+    if (req.body.year != 'all')
+    {
+        query["year"] = req.body.year
+    }
+
+    if (req.body.college != 'all')
+    {
+        query["college"] = req.body.college
+    }
+
+    console.log("query")
+    console.log(query)
+
+    var all_sendables = await Users.find(query);
+
+    var new_task = new MailQueue(
+        {
+            body: req.body.body,
+            branch: req.body.branch,
+            year: req.body.year,
+            college: req.body.college,
+            predicted_affected: all_sendables.length
+        }
+    )
+
+    var task_submited = await new_task.save()
+    
+    req.session.message = "Done"
+    
+    res.redirect('/admin/home');
+
+})
+
+
+
 
 // router.post('/handle_add_college', middleware.auth_super, async (req, res, next) => {
 //     const college = new College(
