@@ -47,6 +47,7 @@ router.get("/act_by_link", async (req, res, next) => {
                 req.session.super = data.super;
                 req.session.mailVerified = data.mail_verified
                 req.session.enabled = data.enabled
+                res.session.batch = data.batch
 
                 res.redirect("/user/home")
 
