@@ -13,7 +13,7 @@ module.exports = {
         */
         console.log("Auth checking middleware");
         if (req.session.email) {
-            if (req.session.mailVerified == 1 && req.session.enabled == 1) {
+            if (req.session.mailVerified == 1 && req.session.enabled >= 1) {
                 console.log("Allowed entry");
                 next();
 
