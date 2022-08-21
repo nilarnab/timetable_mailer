@@ -6,6 +6,7 @@ const mongo = require('mongoose')
 const UsersSchema = new mongo.Schema({
     email: {
         type: String,
+        unique: true,
         required: true
     },
     branch: {

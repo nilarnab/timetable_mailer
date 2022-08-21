@@ -134,12 +134,7 @@
                         <p id="buffering"></p>
                         <p id="conf"></p>
                     </div>
-
-
-
-
                 </div>
-
                 <br>
             </div>
 
@@ -178,6 +173,7 @@
                         },
                             (res, req) => {
                                 if (res.verdict === true) {
+                                    console.log(res)
                                     document.getElementById('username_ok').innerHTML =
                                         '<i class="fa-solid fa-circle-check"></i> Email OK';
                                     $('#username_ok').fadeIn();
@@ -189,9 +185,11 @@
                                     }, 1000)
                                 }
                                 else {
+                                    console.log('username already exists')
                                     document.getElementById('username_ok').innerHTML =
                                         '<i class="fa-solid"></i> email already exists';
                                     document.getElementById('username_ok').style.color = "red";
+                                    $('#username_ok').fadeIn();
                                 }
                             });
                     }, 1000)
