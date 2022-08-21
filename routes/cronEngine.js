@@ -204,7 +204,9 @@ router.get('/start_engine', async (req, res, next) => {
                         })
 
                         cnt += 1
-                        console.log('cnt is ' + cnt)
+                        // console.log('cnt is ' + cnt)
+                        console.log("query result for day" + day + " per_id " + per_id)
+                        console.log(schedule_entry)
 
                         if (schedule_entry.length == 0) {
 
@@ -214,25 +216,34 @@ router.get('/start_engine', async (req, res, next) => {
                             // if the user batch is in the array schedule_entry.batches
                             console.log("checking if batch is valid, with user batch")
                             console.log(user.batch)
-                            console.log("valid batches")
+                            console.log("valid batches for per id " + per_id)
                             console.log(schedule_entry)
                             console.log(schedule_entry[0].valid_batches.split("_"))
-                            if (schedule_entry[0].valid_batches.split("_").indexOf(user.batch) != -1)
+
+                            schedule_entry.forEach((one_schedule, index) => 
                             {
-                                console.log('shedule entry')
-                                schedule_entry = schedule_entry[0]
-                                console.log(schedule_entry)
+                                if (one_schedule.valid_batches.split("_").indexOf(user.batch) != -1)
+                                {
+                                    console.log('shedule entry')
+                                    
+                                    console.log(one_schedule)
 
-                                schedule.push({
-                                    'per_id': per_id,
-                                    'teacher': schedule_entry.teacher,
-                                    course_name: schedule_entry.course_name
-                                })
+                                    schedule.push({
+                                        'per_id': per_id,
+                                        'teacher': one_schedule.teacher,
+                                        course_name: one_schedule.course_name
+                                    })
 
-                                console.log('taking in ' + console.log(schedule_entry.teacher))
+                                    console.log('taking in ' + one_schedule.course_name)
 
+                                }
+                                else
+                                {
+                                    console.log(one_schedule.course_name + " not part of a valid batch " + user.batch)
+                                }
 
-                            }
+                            })
+                            
                         }
 
                         if (cnt == per_ids_array.length) {
