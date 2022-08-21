@@ -61,7 +61,8 @@ router.get('/register', async (req, res, next) => {
         message: req.session.message,
         colleges: colleges,
         branches: branches,
-        years: years
+        years: years,
+        emailSupport: process.env.MAILING_EMAIL
 
     });
 })

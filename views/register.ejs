@@ -56,6 +56,11 @@
                 <div class="line"></div>
                 <br>
 
+                <div id="support" class="support">
+                    <p style="color: green;">Its okayif something went wrong. If you are having problem, feel free to reach us at <a href="<%= mailingSupport %> "><%= mailingSupport %></a></p>
+                </div>
+                <br>
+
                 <p>Register and chill as we will keep sending timetable and later important materials</p>
                 <p>Already have an account? You might wanna <a href="/auth/login" style="color: blue">Login</a></a>
                 </p>
@@ -137,11 +142,12 @@
                 </div>
                 <br>
             </div>
+            
 
             <div class="col-sm-3"></div>
         </div>
 
-        <br>
+        <br><br>
 
         <div>
         </div>
@@ -155,7 +161,7 @@
             $('#buffering').fadeOut();
             $('#username_ok').fadeOut();
             $('#username_checking').fadeOut();
-            
+            $('#support').fadeOut();
             
             $(document).ready(function () {
                 $("#submit").click(function () {
@@ -163,6 +169,7 @@
                     $('#buffering').fadeOut();
                     $('#username_ok').fadeOut();
                     $('#username_checking').fadeOut();
+                    $('#support').fadeOut();
 
                     document.getElementById('username_checking').innerHTML =
                         '<i class="fa-solid fa-spinner"></i> Checking email';
@@ -191,9 +198,10 @@
                                     document.getElementById('username_ok').innerHTML =
                                         '<i class="fa-solid fa-circle-xmark"></i> email already exists';
                                     document.getElementById('username_ok').style.color = "red";
+                                    $('#support').fadeIn();
                                     $('#username_ok').fadeIn();
                                     $('#username_checking').fadeOut();
-                                    
+
                                 }
                             });
                     }, 1000)
@@ -226,6 +234,7 @@
                 } else {
                     document.getElementById('conf').innerHTML = data.message;
                     document.getElementById('conf').style.color = 'tomato';
+                    $('#support').fadeIn();
                 }
                 window.setTimeout(() => {
                     $('#buffering').fadeOut();
