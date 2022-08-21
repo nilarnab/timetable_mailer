@@ -141,7 +141,10 @@ router.post('/register_handle', async (req, res, next) => {
         
 
         await AccessToken.deleteMany({ email: req.body.email }, function(err, obj) {
-                return res.json({ verdict: false, message: "Error in deletion of old token." })
+                
+                console.log("deletion result")
+                console.log(err)
+                
           }).clone();
 
         console.log("creating new token now")
