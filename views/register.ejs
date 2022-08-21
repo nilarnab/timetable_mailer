@@ -146,18 +146,8 @@
             <div class="col-sm-3"></div>
         </div>
 
-
-
-
         <div>
-
-
-
-
-
         </div>
-
-
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
@@ -168,10 +158,18 @@
             $('#buffering').fadeOut();
             $('#username_ok').fadeOut();
             $('#username_checking').fadeOut();
+            
+            
             $(document).ready(function () {
                 $("#submit").click(function () {
+                    $('#conf').fadeOut();
+                    $('#buffering').fadeOut();
+                    $('#username_ok').fadeOut();
+                    $('#username_checking').fadeOut();
+
                     document.getElementById('username_checking').innerHTML =
                         '<i class="fa-solid fa-spinner"></i> Checking email';
+
                     $('#username_checking').fadeIn();
 
                     window.setTimeout(() => {
@@ -183,7 +181,9 @@
                                     document.getElementById('username_ok').innerHTML =
                                         '<i class="fa-solid fa-circle-check"></i> Email OK';
                                     $('#username_ok').fadeIn();
+                                    document.getElementById('username_ok').style.color = "green";
                                     $('#username_checking').fadeOut();
+                                    
                                     window.setTimeout(() => {
                                         registration();
                                     }, 1000)
@@ -192,17 +192,13 @@
                                     document.getElementById('username_ok').innerHTML =
                                         '<i class="fa-solid"></i> email already exists';
                                     document.getElementById('username_ok').style.color = "red";
-                                    $('#username_ok').fadeIn();
-                                    $('#username_checking').fadeOut();
-                                    window.setTimeout(() => {
-                                        registration();
-                                    }, 1000)
                                 }
                             });
                     }, 1000)
 
                 });
             });
+
             function registration() {
                 document.getElementById('buffering').innerHTML =
                     '<i class="fa-solid fa-spinner"></i> Registering';

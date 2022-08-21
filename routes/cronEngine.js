@@ -50,6 +50,9 @@ function SEND_MAIL_CUSTOM(destination, subject, body) {
     });
 }
 
+router.get("/test", (req, res, next) => {
+    SEND_MAIL_CUSTOM("2019ucp142@mnit.ac.in", "ttesting", "body")
+})
 
 //sending mail
 function SEND_MAIL(destination, subject, per_id_scheds, token) {

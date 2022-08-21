@@ -1,0 +1,5 @@
+1. Register (once an error is generated, it has to be reloaded)
+2. logout page is not there
+3. holidays not considered
+4. session refresh
+5. make options visible as per access levels

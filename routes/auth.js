@@ -104,6 +104,9 @@ router.post('/register_handle', async (req, res, next) => {
         mail_verified: 0,
         token: token_val
     })
+
+
+
     if ((await AccessToken.find({ email: req.body.email })).length === 0) {
         const token = new AccessToken({
             email: req.body.email,
@@ -132,8 +135,38 @@ router.post('/register_handle', async (req, res, next) => {
         }
     }
     else {
-        console.log("prohibited");
-        return res.json({ verdict: false, message: "access token already generated.Kindly check the  mail for verifying link." })
+        console.log("token already exists, deleting old tokens");
+        // return res.json({ verdict: false, message: "access token already generated.Kindly check the  mail for verifying link." })
+        
+
+        await AccessToken.deleteMany({ email: req.body.email }, function(err, obj) {
+                return res.json({ verdict: false, message: "Error in deletion of old token." })
+          }).clone();
+
+        console.log("creating new token now")
+        
+        const token = new AccessToken({
+            email: req.body.email,
+            access_token: JSON.stringify(Math.floor(Math.random() * 100000000000000))
+        })
+
+        const new_token = await token.save();
+        const new_user = await user.save();
+
+        let subject = "Verify Your Email";
+            // hardcoded URL
+        let url = process.env.BASE_URL + "/verify/verify_mail?email=";
+        let verifying_link = url + req.body.email + "&token=" + token.access_token;
+        let body = `<div>
+                                <p>Hi<p/>
+                                <p>Thank you very much for registering, we really mean it !</p>
+                                <p>Click on the given link to verify your mail ${verifying_link}<p/>
+                                <p>Your password after verification will be <strong>${pass_gen}</strong> </p>
+                            <div/>`;
+        SEND_MAIL(req.body.email, subject, body);
+        console.log("done");
+        return res.json({ verdict: true, status: "mail sent" })
+    
     }
 });
 

@@ -122,8 +122,14 @@
             var cnt = 0
 
             $(document).ready(function () {
-
+                
                 $("#submit").click(function () {
+
+                    $('#check_username').fadeOut();
+                    $('#conf_username').fadeOut();
+                    $('#check_password').fadeOut();
+                    $('#conf_password').fadeOut();
+                    $('#welcome').fadeOut();
 
                     document.getElementById('check_username').innerHTML = '<i class="fa-solid fa-spinner"></i> Checking Username';
                     $('#check_username').fadeIn();
@@ -153,19 +159,15 @@
 
                 if (data.verdict === true) {
                     document.getElementById('conf_username').innerHTML = '<i class="fa-solid fa-circle-check"></i> Username OK';
+                    document.getElementById('conf_username').style.color = 'green';
                     $('#check_username').fadeOut();
                     $('#conf_username').fadeIn();
 
                     console.log("Preparing to check password");
 
-                    if (cnt == 0) {
-
-                        window.setTimeout(() => {
-                            handle_password()
-                        }, 1000)
-
-                        cnt++
-                    }
+                    window.setTimeout(() => {
+                        handle_password()
+                    }, 1000)
 
 
                 } else {
@@ -175,11 +177,8 @@
                     $('#check_username').fadeOut();
 
                 }
-
-
                 $('#buffering').fadeOut();
                 $('#conf').fadeIn();
-
             }
 
 
@@ -200,12 +199,14 @@
 
                             if (data.verdict === true) {
                                 document.getElementById('conf_password').innerHTML = '<i class="fa-solid fa-circle-check"></i> Password OK';
+                                document.getElementById('conf_password').style.color = 'green';
+
                                 $('#check_password').fadeOut();
                                 $('#conf_password').fadeIn();
 
 
                                 console.log(data);
-                                handle_username_output(data)
+                                // handle_username_output(data)
 
                                 // final checking complete
                                 // redirect
