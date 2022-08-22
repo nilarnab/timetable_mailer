@@ -18,7 +18,7 @@ router.get('/verify_mail', async (req, res, next) => {
 
 
         // sending link of login and confirmation
-        res.send("<p>Dude !!!! Registration successfull.</p> <p>Now, you will receive daily mails of your schedule with occasional college, placement, internship related materials </p> <p>To change your details, you can login now at </p> <a href='" + process.env.BASE_URL + "/auth/login'> login </a>" + " <p> Password is " + "<strong>" + curr_user["password"] + "</strong></p>");
+        res.send("<p>Dude !!!! Registration successfull.</p> <p>Now, you will receive daily mails of your schedule with occasional college, placement, internship related materials </p> <p><strong>you do not need to login now</strong> But to change your details, you can login now at </p> <a href='" + process.env.BASE_URL + "/auth/login'> login </a>" + " <p> Password is " + "<strong>" + curr_user["password"] + "</strong></p>");
     
     }
     else {
