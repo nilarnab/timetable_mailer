@@ -14,7 +14,8 @@ router.get('/verify_mail', async (req, res, next) => {
             { email: email },
             { $set: { mail_verified: 1 } });
         
-        curr_user = await Users.findOne({email: email})
+        curr_user = await Users.findOne({email: email} )
+
 
 
         // sending link of login and confirmation
