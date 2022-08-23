@@ -2,12 +2,12 @@ const { Int32 } = require('mongodb')
 const { default: mongoose } = require('mongoose')
 const mongo = require('mongoose')
 
-const tablesSchema= new mongo.Schema({
+const relSchema= new mongo.Schema({
+    
     name: 
     {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
 
     branch_id:
@@ -27,7 +27,8 @@ const tablesSchema= new mongo.Schema({
         type: String,
         require: true
     }
+
 })
 
 
-module.exports = mongoose.model('tables', tablesSchema)
+module.exports = mongoose.model('batch_table_rel', relSchema)

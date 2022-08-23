@@ -1,102 +1,197 @@
 <%- include('./components/header.ejs') %>
 
-<h2>Show timetable</h2>
+<style>
 
-
-
-
-
-<% if (user.role >= 1)
-{
-    %>
-
-
-    <h1>Teachers</h1>
-
-<!-- prevl -->
-<form action="/admin/handle_add_teacher" method="post">
-    <h2>Add a new teacher</h2>
-    <input name="name">
-    <button role="button" type="submit">Add</button>
-</form>
-
-<% 
+    *
+    {
+        color: rgb(118, 118, 118);
     }
-%> 
+
+    .container {
+        width: 90%;
+        margin: auto;
+    }
+
+    .add_teacher
+    {
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 5px grey;
+    }
+
+    .line
+    {
+        width: 60%;
+        margin: auto;
+        height: 1px;
+        background-color: black;
+    }
+
+</style>
+
+
+<div class="container">
+
+
+    <div align="center">
+        <h2>Admin panel</h2>
+        <p>The control is here</p>
+        <a href="/admin/make_table">create_table</a> <br>
+        <a href="/admin/send_custom_mails">send custom mail</a>
+        <p>Task Verdict: <%= message %> </p>
+    </div>
+
+    <div class="line"></div>
+
+    <br><br>
 
 
 
-<% if (user.super == 1)
+    <% if (user.role >= 1)
 {
     %>
-<!-- super -->
-<br><br>
-<h1>Super Access</h1>
-<form action="/admin/handle_add_college" method="post">
-    <h2>Add a college</h2>
-    <!-- 
+
+    <!-- prevl -->
+    <div class="row">
+
+        <div class="add_teacher col-sm-6">
+            <form action="/admin/handle_add_teacher" method="post">
+                <label for="name">Add a new teacher</label>
+                <input class="form form-control" id="name" name="name">
+                <br>
+                <button class="btn btn-default" role="button" type="submit">Add</button>
+            </form>
+        </div>
+
+        <div class="col-sm-1"></div>
+
+        <div class="add_teacher col-sm-5">
+            
+            <p>Email: <%= user.email %> </p>
+            <p>Privilege: <%= user.role %> </p>
+            <p>Super: <%= user.super %> </p>
+            <p>Linked Table: <%= table_name %></p>
+
+            <br>
+
+        </div>
+
+    </div>
+    
+    <br>
+    
+    <div class="row">
+        <div class="add_teacher col-sm-6">
+            <form action="/admin/handle_link" method="post">
+
+                <p>Select a table to link</p>
+                <select class="from-group" name="name" style="width: 80%; padding: 5px;">
+                    <% all_tables.forEach((table, index) =>
+                    {
+                        %>
+                        <option value="<%= table.name %>"><%= table.name %></option>></option>
+                        <%
+                    }) %>
+        
+                </select>
+
+                <button class="btn btn-default" type="submit">Link</button>
+
+
+            </form>
+        </div>
+    </div>
+
+
+    <% 
+    }
+%>
+
+
+
+    <% if (user.super == 1)
+{
+    %>
+    <!-- super -->
+    <br><br>
+    <h1>Super Access</h1>
+    <form action="/admin/handle_add_college" method="post">
+        <h2>Add a college</h2>
+        <!-- 
         For adding a college
         required: name
      -->
-    <input name="name" required>
-    <button role="button" type="submit">Add</button>
+        <input name="name" required>
+        <button class="btn btn-default" role="button" type="submit">Add</button>
 
 
-</form>
+    </form>
 
 
-<form action="/admin/handle_add_branch" method="post">
-    <h2>Add a new branch</h2>
-    <input name="name" required>
-    <button role="button" type="submit">Add</button>
+    <form action="/admin/handle_add_branch" method="post">
+        <h2>Add a new branch</h2>
+        <input name="name" required>
+        <button role="button" type="submit">Add</button>
 
-</form>
+    </form>
+
+
+    <form action="/admin/handle_add_year" method="post">
+        <h2>Add a new year</h2>
+        <input name="name" required>
+        <button role="button" type="submit">Add</button>
+
+    </form>
 
 
 
-<!-- change identity -->
+    <!-- change identity -->
 
-<form action="/admin/change_identity" method="post">
+    <form action="/admin/change_identity" method="post">
 
-    <h2>Change college, branch, year</h2>
+        <h2>Change college, branch, year</h2>
 
-    <p>Colleges</p>
-    <select name="college_id">
-        <% colleges.forEach((college, index) =>
+        <p>Colleges</p>
+        <select name="college_id">
+            <% colleges.forEach((college, index) =>
         {
             %>
             <option value="<%= college._id.toString() %>"><%= college.name %></option>></option>
             <%
-        }) %> 
-        
-    </select>
+        }) %>
 
-    <p>Branch</p>
-    <select name="branch_id">
-        <% branches.forEach((branch, index) =>
+        </select>
+
+        <p>Branch</p>
+        <select name="branch_id">
+            <% branches.forEach((branch, index) =>
         {
             %>
             <option value="<%= branch._id.toString() %>"><%= branch.short_name %></option>
             <%
-        }) %> 
-        
-    </select>
+        }) %>
 
-    <p>Years</p>
-    <select>
-        <% years.forEach((year, index) =>
+        </select>
+
+        <p>Years</p>
+        <select>
+            <% years.forEach((year, index) =>
         {
             %>
             <option value="<%= year._id.toString() %>"><%= year.name %></option>
             <%
-        }) %> 
-        
-    </select>
+        }) %>
 
-</form>
+        </select>
 
-<%
+        <button class="btn btn-default">Submit</button>
+
+    </form>
+
+    <%
 }
 %>
 
-<h1>Verdict: <%= message %> </h1>
+    <h1>Verdict: <%= message %> </h1>
+
+</div>

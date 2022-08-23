@@ -1,11 +1,170 @@
-<%- include('./components/header') %> 
+<%- include('./components/header') %>
+
+<style>
+    * {
+        color: rgb(118, 118, 118);
+    }
+
+    .container {
+        width: 90%;
+        margin: auto;
+    }
+
+    .card {
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 5px grey;
+    }
+
+    .line {
+        width: 60%;
+        margin: auto;
+        height: 1px;
+        background-color: black;
+    }
+</style>
+
+
+<div class="container">
+    <div align="center">
+        <h2>Welcome</h2>
+        <p>Change your personal info here</p>
+
+        <a href="/admin/home">admin_home</a>
+
+    </div>
+
+    <div class="line"></div>
+
+    <br><br>
+
+
+    <div class="row">
+
+        <div class="card col-sm-5">
+            <h4 align="center">Personal info</h4>
+            <div class="line"></div>
+            <br><br>
+
+            <table class="table table-hover">
+
+                <tbody>
+                    <tr>
+                        <td>
+                            Email
+                        </td>
+                        <td>
+                            <%= session.email %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            College
+                        </td>
+                        <td>
+                            <%= user_info.college %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Branch
+                        </td>
+                        <td>
+                            <%= user_info.branch %>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            Year
+                        </td>
+                        <td>
+                            <%= user_info.year %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Role
+                        </td>
+                        <td>
+                            <%= session.role %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Super
+                        </td>
+                        <td>
+                            <%= session.super %>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+            
+            <br>
+
+        </div>
+
+        <div class="col-sm-1"></div>
+
+        <div class="card col-sm-6">
+            <form action="/user/change_identity" method="post">
+
+                <h2>Change college, branch, year</h2>
+
+                
+                <p>Colleges</p>
+                <select class="form-select form-select-lg" name="college_id" style="width: 100%; padding: 5px">
+                    <% colleges.forEach((college, index) =>
+                {
+                    %>
+                    <option value="<%= college._id.toString() %>"><%= college.name %></option>></option>
+                    <%
+                }) %>
+
+                </select>
+
+                <p>Branch</p>
+                <select name="branch_id" style="width: 100%; padding: 5px">
+                    <% branches.forEach((branch, index) =>
+                {
+                    %>
+                    <option value="<%= branch._id.toString() %>"><%= branch.short_name %></option>
+                    <%
+                }) %>
+
+                </select>
+
+                <p>Years</p>
+                <select name="year_id" style="width: 100%; padding: 5px">
+                    <% years.forEach((year, index) =>
+                {
+                    %>
+                    <option value="<%= year._id.toString() %>"><%= year.name %></option>
+                    <%
+                }) %>
+
+                </select>
+
+                <br><br>
+
+                <button class="btn btn-default">Submit</button>
+
+            </form>
+
+        </div>
 
 
 
-<h2>Session data  </h2>
 
-<p>email <%= session.email %></p>
-<p>college <%= session.college %></p>
-<p>branch <%= session.branch %></p>
-<p>role <%= session.role %></p>
-<p>super <%= session.super %></p>
+
+    </div>
+
+</div>

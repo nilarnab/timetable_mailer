@@ -1,244 +1,247 @@
 <%- include('./components/header.ejs') %>
 
-<style>
-    body,
-    html {
-        padding: 0 0;
-        margin: 0 !important;
-        height: 100%;
-        background: linear-gradient(150deg, white, rgb(178, 209, 235));
-        font-family: 'Indie Flower', cursive;
-        font-weight: 5000 !important;
-        font-size: large;
-        color: rgb(6, 32, 54) !important;
-        overflow: auto;
-    }
+    <style>
+        body,
+        html {
+            padding: 0 0;
+            margin: 0 !important;
+            height: 100%;
+            background: linear-gradient(150deg, white, rgb(178, 209, 235));
+            font-family: 'Indie Flower', cursive;
+            font-weight: 5000 !important;
+            font-size: large;
+            color: rgb(6, 32, 54) !important;
+            overflow: auto;
+        }
 
-    .outer {}
+        .outer {}
 
-    .line {
-        background-color: rgb(46, 113, 173);
-        width: 80%;
-        height: 1px;
-        margin: auto;
-    }
+        .line {
+            background-color: rgb(46, 113, 173);
+            width: 80%;
+            height: 1px;
+            margin: auto;
+        }
 
-    .elevate {
-        box-shadow: 0px 0px 20px rgb(100, 139, 174);
-    }
+        .elevate {
+            box-shadow: 0px 0px 20px rgb(100, 139, 174);
+        }
 
-    .btn_elevate {
-        box-shadow: 1px 1px 20px rgb(10, 66, 115);
-    }
-
-
-    .container {
-
-        margin-top: 50px;
-        padding: 50px;
-
-        border-radius: 20px;
-        background: linear-gradient(150deg, white, rgb(178, 209, 235));
-
-        background-color: rgb(249, 252, 255);
-        justify-content: center;
-
-        color: rgb(46, 113, 173) !important;
+        .btn_elevate {
+            box-shadow: 1px 1px 20px rgb(10, 66, 115);
+        }
 
 
+        .container {
 
-    }
-</style>
+            margin-top: 50px;
+            padding: 50px;
+
+            border-radius: 20px;
+            background: linear-gradient(150deg, white, rgb(178, 209, 235));
+
+            background-color: rgb(249, 252, 255);
+            justify-content: center;
+
+            color: rgb(46, 113, 173) !important;
 
 
-<body>
 
-    <div class="outer">
+        }
+    </style>
 
-        <div class="col-sm-3"></div>
 
-        <div class="container col-sm-6 elevate">
-            <h1 align="center">Chill Padhai <i class="fa-solid fa-leaf"></i></h1>
+    <body>
 
-            <br>
-            <div class="line"></div>
-            <br>
+        <div class="outer">
 
-            <p>Login to change the your current information</p>
-            <p>Do not have an account? You might wanna <a href="/auth/register" style="color: blue">Register</a></a>
-            </p>
+            <div class="col-sm-3"></div>
 
-            <br>
+            <div class="container col-sm-6 elevate">
+                <h1 align="center">Chill Padhai <i class="fa-solid fa-leaf"></i></h1>
 
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="BabyGobi@college.ac.in"
-                    required>
-            </div>
-
-            <br>
-
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" class="form-control" id="password" name="password"
-                    placeholder="shakalaka_boom_boom" required>
-            </div>
-
-            <br>
-
-            <div align="center">
                 <br>
-                <button class="btn btn-primary btn-lg btn_elevate" id="submit"> 
-                    <i class="fa-solid fa-umbrella-beach"></i>
-                    Submit
-                </button>
+                <div class="line"></div>
                 <br>
-        
-                <p id="check_username"></p>
-                <p id="conf_username" style="color: green;"></p>
-                <p id="check_password"></p>
-                <p id="conf_password" style="color: green;"></p>
-                <p id="welcome" style="color: green;"></p>
+
+                <p>Login to change the your current information</p>
+                <p>Do not have an account? You might wanna <a href="/auth/register" style="color: blue">Register</a></a>
+                </p>
+
+                <br>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email"
+                        placeholder="BabyGobi@college.ac.in" required>
+                </div>
+
+                <br>
+
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password"
+                        placeholder="shakalaka_boom_boom" required>
+                </div>
+
+                <br>
+
+                <div align="center">
+                    <br>
+                    <button class="btn btn-primary btn-lg btn_elevate" id="submit">
+                        <i class="fa-solid fa-umbrella-beach"></i>
+                        Submit
+                    </button>
+                    <br>
+
+                    <p id="check_username"></p>
+                    <p id="conf_username" style="color: green;"></p>
+                    <p id="check_password"></p>
+                    <p id="conf_password" style="color: green;"></p>
+                    <p id="welcome" style="color: green;"></p>
+                </div>
+
             </div>
+
+            <div class="col-sm-3"></div>
 
         </div>
 
-        <div class="col-sm-3"></div>
-        
-    </div>
 
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
+            </script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
-    </script>
+        <script>
+            $('#check_username').fadeOut();
+            $('#conf_username').fadeOut();
+            $('#check_password').fadeOut();
+            $('#conf_password').fadeOut();
+            $('#welcome').fadeOut();
 
-    <script>
-        $('#check_username').fadeOut();
-        $('#conf_username').fadeOut();
-        $('#check_password').fadeOut();
-        $('#conf_password').fadeOut();
-        $('#welcome').fadeOut();
+            var cnt = 0
 
-        var cnt = 0
+            $(document).ready(function () {
+                
+                $("#submit").click(function () {
 
-        $(document).ready(function () {
+                    $('#check_username').fadeOut();
+                    $('#conf_username').fadeOut();
+                    $('#check_password').fadeOut();
+                    $('#conf_password').fadeOut();
+                    $('#welcome').fadeOut();
 
-            $("#submit").click(function () {
+                    document.getElementById('check_username').innerHTML = '<i class="fa-solid fa-spinner"></i> Checking Username';
+                    $('#check_username').fadeIn();
 
-                document.getElementById('check_username').innerHTML = '<i class="fa-solid fa-spinner"></i> Checking Username';
-                $('#check_username').fadeIn();
+                    console.log("clicked subbmit")
 
-                console.log("clicked subbmit")
-
-                $.post("/auth/login_username_handle", {
+                    $.post("/auth/login_username_handle", {
                         email: document.getElementById('email').value,
                     },
-                    function (data, status) {
-                        
-                        $('#check_username').fadeOut();
-                        console.log(data)
-                        
-                        window.setTimeout(() => {
-                            handle_username_output(data)
-                        }, 1000)
-                        
-                    });
+                        function (data, status) {
+
+                            $('#check_username').fadeOut();
+                            console.log(data)
+
+                            window.setTimeout(() => {
+                                handle_username_output(data)
+                            }, 1000)
+
+                        });
+                });
+
             });
-        
-        });
-        
 
 
-        function handle_username_output(data) {
 
-            if (data.verdict === true) {
-                document.getElementById('conf_username').innerHTML = '<i class="fa-solid fa-circle-check"></i> Username OK';
-                $('#check_username').fadeOut();
-                $('#conf_username').fadeIn();
-                
-                console.log("Preparing to check password");
-                
-                if (cnt == 0)
-                {
+            function handle_username_output(data) {
+
+                if (data.verdict === true) {
+                    document.getElementById('conf_username').innerHTML = '<i class="fa-solid fa-circle-check"></i> Username OK';
+                    document.getElementById('conf_username').style.color = 'green';
+                    $('#check_username').fadeOut();
+                    $('#conf_username').fadeIn();
+
+                    console.log("Preparing to check password");
 
                     window.setTimeout(() => {
                         handle_password()
                     }, 1000)
-                    
-                    cnt ++
-                }
-                
 
-            } else {
-                document.getElementById('conf_username').innerHTML = '<i class="fa-solid fa-circle-xmark"></i> ' + data.message;
-                document.getElementById('conf_username').style.color = 'tomato';
-                $('#conf_username').fadeIn();
-                $('#check_username').fadeOut();
-                
+
+                } else {
+                    document.getElementById('conf_username').innerHTML = '<i class="fa-solid fa-circle-xmark"></i> ' + data.message;
+                    document.getElementById('conf_username').style.color = 'tomato';
+                    $('#conf_username').fadeIn();
+                    $('#check_username').fadeOut();
+
+                }
+                $('#buffering').fadeOut();
+                $('#conf').fadeIn();
             }
 
 
-            $('#buffering').fadeOut();
-            $('#conf').fadeIn();
+            function handle_password() {
 
-        }
-
-
-        function handle_password()
-        {
-
-            document.getElementById('check_password').innerHTML = '<i class="fa-solid fa-spinner"></i> Checking password';
-            $('#check_password').fadeIn();
-            
-
-            window.setTimeout(() => {
-
-                $.post("/auth/login_handle", {
-                    email: document.getElementById('email').value,
-                    password: document.getElementById('password').value
-                },
-    
-                function (data, status) {
-                    
-                    if (data.verdict === true)
-                    {
-                        document.getElementById('conf_password').innerHTML = '<i class="fa-solid fa-circle-check"></i> Password OK';
-                        $('#check_password').fadeOut();
-                        $('#conf_password').fadeIn();
-        
-        
-                        console.log(data);
-                        handle_username_output(data)
-        
-                        // final checking complete
-                        // redirect
-        
-                        window.setTimeout(() =>
-                        {
-                            document.getElementById('welcome').innerHTML = 'Welcome, redirecting to home page';
-                            $('#welcome').fadeIn();
-                        }, 1000)
-
-                    }
-                    else
-                    {
-                        document.getElementById('conf_password').innerHTML = '<i class="fa-solid fa-circle-xmark"></i> ' + data.message ;
-                        document.getElementById('conf_password').style.color = 'tomato';
-                        $('#check_password').fadeOut();
-                        $('#conf_password').fadeIn();
-
-                    }
-                    
-                });
+                document.getElementById('check_password').innerHTML = '<i class="fa-solid fa-spinner"></i> Checking password';
+                $('#check_password').fadeIn();
 
 
-            }, 1000)
-            
-        }
-        
+                window.setTimeout(() => {
+
+                    $.post("/auth/login_handle", {
+                        email: document.getElementById('email').value,
+                        password: document.getElementById('password').value
+                    },
+
+                        function (data, status) {
+
+                            if (data.verdict === true) {
+                                document.getElementById('conf_password').innerHTML = '<i class="fa-solid fa-circle-check"></i> Password OK';
+                                document.getElementById('conf_password').style.color = 'green';
+
+                                $('#check_password').fadeOut();
+                                $('#conf_password').fadeIn();
 
 
-    </script>
-</body>
+                                console.log(data);
+                                // handle_username_output(data)
 
-</html>
+                                // final checking complete
+                                // redirect
+
+                                window.setTimeout(() => {
+                                    document.getElementById('welcome').innerHTML = 'Welcome, redirecting to home page';
+                                    $('#welcome').fadeIn();
+
+                                    window.setTimeout(() => {
+                                        location.href = "/user/home";
+                                    }, 1000)
+
+
+                                }, 1000)
+                                
+
+                            }
+                            else {
+                                document.getElementById('conf_password').innerHTML = '<i class="fa-solid fa-circle-xmark"></i> ' + data.message;
+                                document.getElementById('conf_password').style.color = 'tomato';
+                                $('#check_password').fadeOut();
+                                $('#conf_password').fadeIn();
+
+                            }
+
+                        });
+
+
+                }, 1000)
+
+            }
+
+
+
+        </script>
+    </body>
+
+    </html>
